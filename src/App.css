@@ -1,0 +1,23 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.main-content {
+  margin-left: 220px; /* ✅ Sidebar width anthe undali */
+  flex: 1;
+  padding: 20px; /* ✅ 40px nunchi 20px ki taggincham */
+  background: #f4f6f9;
+  width: calc(100% - 220px); /* ✅ Remaining space teskovali */
+}
