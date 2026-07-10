@@ -1,290 +1,315 @@
-import './Dashboard.css' 
-import { useState } from 'react';
+// import "./Dashboard.css";
+// import { useState } from "react";
 
-function Dashboard(){
-    function addproduct(){
+// function Dashboard() {
+//   const [products, setProducts] = useState([
+//     { id: 1, name: "Laptop", category: "Electronics", quantity: 0, price: 50000, buyQty: 0 },
+//     { id: 2, name: "Mouse", category: "Electronics", quantity: 0, price: 1000, buyQty: 0 },
+//     { id: 3, name: "Keyboard", category: "Electronics", quantity: 0, price: 2000, buyQty: 0 },
+//     { id: 4, name: "Refrigerator", category: "Electronics", quantity: 0, price: 30000, buyQty: 0 },
+//     { id: 5, name: "School Bag", category: "Bags", quantity: 0, price: 1000, buyQty: 0 },
+//     { id: 6, name: "Notebook", category: "Stationery", quantity: 0, price: 50, buyQty: 0 },
+//     { id: 7, name: "Pen", category: "Stationery", quantity: 0, price: 50, buyQty: 0 },
+//     { id: 8, name: "USB Cable", category: "Accessories", quantity: 0, price: 200, buyQty: 0 },
+//     { id: 9, name: "Water Bottle", category: "Accessories", quantity: 0, price: 150, buyQty: 0 },
+//     { id: 10, name: "Monitor", category: "Electronics", quantity: 0, price: 1500, buyQty: 0 },
+//   ]);
+  
+//   const [orders, setOrders] = useState([]);
+
+//   const addProduct = (index) => {
+//     const temp = [...products];
+//     temp[index].quantity++;
+//     temp[index].buyQty++;
+//     setProducts(temp);
+//   };
+
+//   const removeProduct = (index) => {
+//     const temp = [...products];
+//     if (temp[index].quantity > 0) {
+//       temp[index].quantity--;
+//       if (temp[index].buyQty > 0) {
+//         temp[index].buyQty--;
+//       }
+//     } else {
+//       alert("Stock is not available");
+//     }
+//     setProducts(temp);
+//   };
+
+//   const orderProduct = (index) => {
+//     if (products[index].quantity > 0) {
+//       const newOrder = {
+//         name: products[index].name,
+//         category: products[index].category,
+//         price: products[index].price,
+//       };
+//       setOrders([...orders, newOrder]);
+//       alert(`${products[index].name} ordered successfully!`);
+//     } else {
+//       alert("Please add product. Stock is not available.");
+//     }
+//   }; 
+
+//   return ( 
+//     <div className="dashboard-container">
+//       <h2>Inventory Management Dashboard</h2>
+
+//       <div className="table-wrapper">
+//         <table>
+//           <thead>
+//             <tr>
+//               <th>ID</th>
+//               <th>Product Name</th>
+//               <th>Category</th>
+//               <th>Quantity</th>
+//               <th>Price</th>
+//               <th>Add</th>
+//               <th>Remove</th>
+//               <th>Buy Qty</th>
+//               <th>Order</th>
+//             </tr>
+//           </thead>
+
+//           <tbody>
+//             {products.map((product, index) => (
+//               <tr key={product.id}>
+//                 <td>{product.id}</td>
+//                 <td>{product.name}</td>
+//                 <td>{product.category}</td>
+//                 <td>{product.quantity}</td>
+//                 <td>₹{product.price}</td>
+//                 <td>
+//                   <button className="btn-add" onClick={() => addProduct(index)}>+</button>
+//                 </td>
+//                 <td>
+//                   <button className="btn-remove" onClick={() => removeProduct(index)}>-</button>
+//                 </td>
+//                 <td>{product.buyQty}</td>
+//                 <td>
+//                   <button className="btn-order" onClick={() => orderProduct(index)}>Order</button>
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+
+//       {orders.length > 0 && (
+//         <>
+//           <h2 className="orders-title">Orders</h2>
+//           <div className="table-wrapper">
+//             <table>
+//               <thead>
+//                 <tr>
+//                   <th>Product</th>
+//                   <th>Category</th>
+//                   <th>Price</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {orders.map((order, index) => (
+//                   <tr key={index}>
+//                     <td>{order.name}</td>
+//                     <td>{order.category}</td>
+//                     <td>₹{order.price}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   ); 
+// }
+
+// export default Dashboard;
+import "./Dashboard.css";
+import { useState } from "react"; // useEffect teesesaam
+
+function Dashboard() {
+  const [products, setProducts] = useState([
+    { id: 1, name: "Laptop", category: "Electronics", quantity: 0, price: 120000, buyQty: 0 },
+    { id: 2, name: "Mouse", category: "Electronics", quantity: 0, price: 1000, buyQty: 0 },
+    { id: 3, name: "Keyboard", category: "Electronics", quantity: 0, price: 1200, buyQty: 0 },
+    { id: 4, name: "Refrigerator", category: "Electronics", quantity: 0, price: 30000, buyQty: 0 },
+    { id: 5, name: "School Bag", category: "Bags", quantity: 0, price: 1000, buyQty: 0 },
+    { id: 6, name: "Notebook", category: "Stationery", quantity: 0, price: 50, buyQty: 0 },
+    { id: 7, name: "Pen", category: "Stationery", quantity: 0, price: 50, buyQty: 0 },
+    { id: 8, name: "USB Cable", category: "Accessories", quantity: 0, price: 200, buyQty: 0 },
+    { id: 9, name: "Water Bottle", category: "Accessories", quantity: 0, price: 150, buyQty: 0 },
+    { id: 10, name: "Monitor", category: "Electronics", quantity: 0, price: 10000, buyQty: 0 },
+  ]);
+
+  const [orders, setOrders] = useState([]); // localStorage load teesesaam
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+
+  // ❌ useEffect delete chesam. So data save kaadu
+
+  const addProduct = (index) => {
+    const product = [...products];
+    product[index].quantity++;
+    product[index].buyQty++;
+    setProducts(product);
+  };
+
+  const removeProduct = (index) => {
+    const product = [...products];
+    if (product[index].quantity > 0) {
+      product[index].quantity--;
+      if (product[index].buyQty > 0) {
+        product[index].buyQty--;
+      }
+    } else {
+      alert("Stock is not available");
     }
-    return(
-        <div className="dashboard-container">
-            <h2>Inventory Management Dashboard</h2>
-            
-        
-        <div className="cards">
-            <div className="card">
-             <h3>Total Products</h3> 
-                    <p>120</p>
-                </div>
-                <div className="card">
-                    <h3>Low Stock</h3>
-                    <p>10</p> 
-                </div>
-                <div className="card">
-                    <h3>Out of Stock</h3>
-                    <p>5</p>
-                </div>
-                <div className="card">
-                    <h3>Categories</h3> 
-                    <p>8</p>
-                </div>
-            </div>
+    setProducts(product);
+  };
 
-            
-    <h3 className="table-title">Recent Product Table</h3>
-        <div className="table-wrapper">
+  const orderProduct = (index) => {
+    if (products[index].quantity > 0) {
+      const newOrder = {
+        id: Date.now(),
+        name: products[index].name,
+        category: products[index].category,
+        price: products[index].price,
+        qty: products[index].buyQty || 1,
+      };
+      setOrders([...orders, newOrder]);
+      const temp = [...products];
+      temp[index].quantity = temp[index].quantity - (temp[index].buyQty || 1);
+      temp[index].buyQty = 0;
+      setProducts(temp);
+
+      alert(`${products[index].name} ordered successfully!`);
+    } else {
+      alert("Please add product. Stock is not available.");
+    }
+  };
+
+  const deleteOrder = (id) => {
+    setOrders(orders.filter(order => order.id!== id));
+  }
+
+  const filteredProducts = products.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase()) &&
+    (category === "All" || p.category === category)
+  );
+
+  const totalProducts = products.length;
+  const totalStock = products.reduce((sum, p) => sum + p.quantity, 0);
+  const totalOrderValue = orders.reduce((sum, o) => sum + o.price * o.qty, 0);
+
+  const getStatusClass = (qty) => {
+    if(qty === 0) return 'out-stock';
+    if(qty < 5) return 'low-stock';
+    return 'in-stock';
+  }
+
+  return (
+    <div className="dashboard-container">
+      <h2>Inventory Management Dashboard</h2>
+
+      <div className="cards">
+        <div className="card"><h3>Total Products</h3><p>{totalProducts}</p></div>
+        <div className="card"><h3>Total Stock</h3><p>{totalStock}</p></div>
+        <div className="card"><h3>Total Order Value</h3><p>₹{totalOrderValue}</p></div>
+      </div>
+
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Search Product..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="All">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Bags">Bags</option>
+          <option value="Stationery">Stationery</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+      </div>
+
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Price</th>
+              <th>Add</th>
+              <th>Remove</th>
+              <th>Buy Qty</th>
+              <th>Order</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProducts.map((product, index) => (
+              <tr key={product.id}>
+                <td>{product.id}</td>
+                <td>{product.name}</td>
+                <td>{product.category}</td>
+                <td className={getStatusClass(product.quantity)}>{product.quantity}</td>
+                <td>₹{product.price}</td>
+                <td><button className="btn-add" onClick={() => addProduct(index)}>+</button></td>
+                <td><button className="btn-remove" onClick={() => removeProduct(index)}>-</button></td>
+                <td>{product.buyQty}</td>
+                <td>
+                  <button
+                    className="btn-order"
+                    onClick={() => orderProduct(index)}
+                    disabled={product.quantity === 0}
+                  >
+                    Order
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {orders.length > 0 && (
+        <>
+          <h2 className="orders-title">Orders</h2>
+          <div className="table-wrapper">
             <table>
-                <th> 
-                    <tr>
-                        <th>ID</th>
-                        <th>Product Name</th>
-                        <th>Category</th> 
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                    </tr>
-                    </th>
-            <tbody>
+              <thead>
                 <tr>
-                    <td>1</td>
-                    <td>Laptop</td>
-                    <td>Electronics</td>
-                    <td>20</td>
-                    <td>₹50,000</td>
-                    <td><span className="status in-stock">In Stock</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Mouse</td>
-                        <td>Electronics</td> 
-                        <td>15</td>
-                        <td>₹1,000</td>
-                        <td><span className="status in-stock">In Stock</span></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Keyboard</td>
-                        <td>Electronics</td>
-                        <td>10</td> 
-                        <td>₹2,000</td>
-                        <td><span className="status in-stock">In Stock</span></td> {/* td close */}
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Refrigerator</td> 
-                        <td>Electronics</td>
-                        <td>5</td>
-                        <td>₹30,000</td>
-                        <td><span className="status out-stock">Out of Stock</span></td> {/* spelling fix */}
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                            <td>School Bags</td>
-                            <td>Bags</td>
-                            <td>50</td>
-                            <td>₹1,000</td>
-                            <td><span className="status in-stock">In Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Notebooks</td>
-                            <td>Stationery</td> 
-                            <td>100</td>
-                            <td>₹50</td>
-                            <td><span className="status in-stock">In Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Pen</td>
-                            <td>Stationery</td>
-                            <td>150</td>
-                            <td>₹50</td>
-                            <td><span className="status low-stock">Low Stock</span></td>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td>{order.name}</td>
+                    <td>{order.category}</td>
+                    <td>{order.qty}</td>
+                    <td>₹{order.price * order.qty}</td>
+                    <td><button className="btn-delete" onClick={() => deleteOrder(order.id)}>Delete</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>USB Cable</td>
-                            <td>Accessories</td>
-                            <td>100</td>
-                            <td>₹200</td>
-                            <td><span className="status out-stock">Out of Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>Water Bottle</td>
-                            <td>Accessories</td>
-                            <td>200</td>
-                            <td>₹150</td>
-                            <td><span className="status in-stock">In Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>Monitor</td>
-                            <td>Electronics</td>
-                            <td>100</td>
-                            <td>₹1,500</td>
-                            <td><span className="status out-stock">Out of Stock</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    )
-};
 export default Dashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

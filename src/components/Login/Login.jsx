@@ -14,8 +14,8 @@ function Login() {
 
   const handleLogin = () => {
     if (
-      email === "admin123@gmail.com" &&
-      password === "admin123"
+      email === "basheerun@gmail.com" &&
+      password === "basheerun123"
     ) {
       setMessage("");
       setLoading(true);
