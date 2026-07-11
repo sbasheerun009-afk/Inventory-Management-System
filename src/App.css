@@ -1,23 +1,13 @@
-.app {
-  display: flex;
-  min-height: 100vh;
-}
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f1f5f9; }
+.page-container { padding: 20px; }
+.page-container h2 { color: #1e293b; margin-bottom: 20px; }
 
-.sidebar {
-  width: 220px;
-  background: #1e293b;
-  color: white;
-  padding: 20px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
+.data-table {
+  width: 100%; border-collapse: collapse; background: white;
+  border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-.main-content {
-  margin-left: 220px; /* ✅ Sidebar width anthe undali */
-  flex: 1;
-  padding: 20px; /* ✅ 40px nunchi 20px ki taggincham */
-  background: #f4f6f9;
-  width: calc(100% - 220px); /* ✅ Remaining space teskovali */
-}
+.data-table th, .data-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.data-table th { background: #6366f1; color: white; font-weight: 600; }
+.data-table tr:hover { background: #f8fafc; }
+.status.delivered { color: #16a34a; font-weight: 600; }
+.status.pending { color: #ea580c; font-weight: 600; }

@@ -1,22 +1,13 @@
 .sidebar {
   width: 240px;
-  background: #1e293b; 
-  color: #ffffff;
-  height: calc(100vh - 60px);
-  position: fixed;
-  left: 0;
-  top: 60px; 
+  height: calc(100vh - 60px); /* NavBar height minus */
+  background: #1e293b; /* dark slate */
+  color: white;
   padding: 20px 0;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-
-.sidebar h3 {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 30px;
-  color: #94a3b8; 
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  position: sticky;
+  top: 60px; /* NavBar height */
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
 .sidebar ul {
@@ -25,23 +16,45 @@
   margin: 0;
 }
 
-.sidebar ul li {
-  padding: 14px 25px;
+.sidebar li {
+  margin-bottom: 5px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px 25px;
+  color: #cbd5e1; /* light gray text */
+  text-decoration: none;
   font-size: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  transition: all 0.2s ease;
   border-left: 3px solid transparent;
 }
 
-.sidebar ul li:hover {
-  background: #334155; 
-  border-left: 3px solid #3b82f6; 
-  padding-left: 22px;
+.sidebar a:hover {
+  background: #334155; /* hover bg */
+  color: white;
+  border-left: 3px solid #6366f1; /* purple line */
 }
 
-.sidebar ul li.active {
+/* Active link */
+.sidebar a.active {
   background: #334155;
-  border-left: 3px solid #3b82f6;
+  color: white;
+  border-left: 3px solid #6366f1;
   font-weight: 600;
 }
 
+/* Scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+}

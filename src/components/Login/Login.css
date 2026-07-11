@@ -1,26 +1,21 @@
 .login-container {
-  width: 350px;
-  margin: 80px auto;
-  padding: 25px;
-  text-align: center;
-  border-radius: 10px;
-  background: white;
-  box-shadow: 0 0 10px gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+ 
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+    url('https://images.unsplash.com/photo-1586528115955-c4bf1c4e9b4b?q=80&w=2070') 
+    no-repeat center center/cover;
 }
 
-.login-container input {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-.login-container button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.error-message {
-  color: red;
-  font-weight: bold;
+.login-box {
+  background: rgba(255, 255, 255, 0.95); 
+  backdrop-filter: blur(10px); 
+  padding: 40px 30px;
+  border-radius: 15px;
+  width: 380px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }

@@ -1,16 +1,19 @@
-import './NavBar.css';
-function NavBar(){
-    return(
-        <div className="NavBar">
-        <h1>Inventory Management System</h1>
-        <div className="nav-links">
-        <h2>🔍Search</h2>
-        <h2>👤Admin</h2>   
-        <h2>Logout</h2>
-        
+import { Link } from "react-router-dom"; 
+import "./NavBar.css";
 
-        </div>
-        </div>
-    )
+function NavBar() {
+  return (
+    <nav className="navbar">
+      <h2>🏢Inventory Management System</h2>
+      
+      <input type="text" placeholder="🔍 Search" />
+
+      <div className="nav-right">
+        <span>👤 Admin</span>
+        <Link to="/Login" className="Login-btn">LogIn</Link>
+      </div>
+    </nav>
+  );
 }
+
 export default NavBar;
