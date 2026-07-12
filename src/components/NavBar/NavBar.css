@@ -1,62 +1,87 @@
-.NavBar {
+.navbar {
   width: 95%;
   height: 70px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  color: #1e293b;
+
+  background-image: url("../../assets/Inventory-management-system.jpeg");
+  background-size: cover;
+  background-position: center;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0 40px;
-  position: fixed; 
+
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000; 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+
+  z-index: 1000;
+
+  color: white;
+
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-.NavBar h1 {
+
+/* Title */
+.navbar h2 {
   font-size: 22px;
   font-weight: 800;
   margin: 0;
-  color: #3b82f6;
-  letter-spacing: -0.5px;
 }
 
-.nav-links {
+
+/* Search box */
+.navbar input {
+  width: 250px;
+  padding: 10px 15px;
+
+  border-radius: 20px;
+  border: none;
+  outline: none;
+
+  font-size: 15px;
+}
+
+
+/* Right side */
+.nav-right {
   display: flex;
   align-items: center;
-  gap: 35px;
+  gap: 25px;
 }
 
-.nav-links h2 {
-  font-size: 15px;
+
+.nav-right span {
+  font-size: 18px;
   font-weight: 600;
-  margin: 0;
+}
+
+
+/* Login button */
+.nav-right button {
+
+  padding: 10px 25px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #2563eb;
+
+  font-weight: bold;
+
   cursor: pointer;
-  color: #475569;
-  transition: all 0.3s ease;
-  position: relative;
-  padding-bottom: 4px;
+
+  transition: 0.3s;
 }
 
 
-.nav-links h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #3b82f6;
-  transition: width 0.3s ease;
-} 
+.nav-right button:hover {
 
-.nav-links h2:hover {
-  color: #3b82f6;
+  background-color: #2563eb;
+  color: white;
+
 }
-
-.nav-links h2:hover::after {
-  width: 100%;
-} 

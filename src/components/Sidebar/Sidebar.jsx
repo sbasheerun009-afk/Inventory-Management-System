@@ -28,32 +28,32 @@ function Sidebar() {
       <ul>
         <li>
           <NavLink to="/products" className={({isActive}) => isActive ? "active" : ""}>
-            Products
+            📦Products
           </NavLink>
         </li>
         <li>
           <NavLink to="/categories" className={({isActive}) => isActive ? "active" : ""}>
-            Categories
+            🗂️Categories
           </NavLink>
         </li>
         <li>
           <NavLink to="/stockin" className={({isActive}) => isActive ? "active" : ""}>
-            Stock In
+           📥Stock In
           </NavLink>
         </li>
         <li>
           <NavLink to="/stockout" className={({isActive}) => isActive ? "active" : ""}>
-            Stock Out
+            📤Stock Out
           </NavLink>
         </li>
         <li>
           <NavLink to="/suppliers" className={({isActive}) => isActive ? "active" : ""}>
-            Suppliers
+            🚚Suppliers
           </NavLink>
         </li>
         <li>
           <NavLink to="/orders" className={({isActive}) => isActive ? "active" : ""}>
-            Orders
+           🛒Orders
           </NavLink>
         </li>
       </ul>

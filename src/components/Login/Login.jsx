@@ -1,210 +1,124 @@
-// import { useState } from "react";
-// import Dashboard from "../Dashboard/Dashboard";
-// import "./Login.css";
-// import Sidebar from "../Sidebar/Sidebar";
-
-// function Login() {
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [loading, setLoading] = useState(false);
-
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [message, setMessage] = useState("");
-
-//   const handleLogin = () => {
-//     if (
-//       email === "basheerun@gmail.com" &&
-//       password === "basheerun123"
-//     ) {
-//       setMessage("");
-//       setLoading(true);
-
-//       setTimeout(() => {
-//         setLoading(false);
-//         setIsLoggedIn(true);
-//       }, 2000);
-//     } else {
-//       setMessage("Invalid email or password");
+// import {useState} from "react";
+// function Login(){
+//   const [email,setEmail] = useState("")
+//   const [Password, setPassword] = useState("")
+//   const [showpassword, setShowpassword] = useState(false)
+//   // const [login, setLogin] = useState("")
+//   const handleemail = (event) => {
+//     setEmail(event.target.value)
+//   }
+//   const handlepassword = (event) => {
+//     setPassword(event.target.value)
+//   }
+//   const handlehowpassword = (event) => {
+//     setShowpassword(event.target.value)
+//   }
+//     if(email === "basheerun@gmail.com"&& Password==="Basheerun@123")
+//       alert("Login sucsessfully")
+//     else{
+//       alert("Email and Password Incorrect")
 //     }
-//   };
-//   if (loading) {
-//     return (
-//       <div className="login-container">
-//         <h2>Loading...</h2>
-//         <p>Please wait while we log you in.</p>
-//       </div>
-//     );
-//   }
-//   if (isLoggedIn) {
-//     return (
-//       <>
-//         <Dashboard />
-//         <Sidebar/>
-//         <div style={{ textAlign: "center", marginTop: "20px" }}>
-//           <button onClick={() => setIsLoggedIn(false)}>
-//             Logout
-//           </button>
-//         </div>
-//       </>
-//     );
-//   }
 //   return (
-//     <div className="login-container">
-//       <h2>Inventory Management Login Page</h2>
-
-//       <input
-//         type="email"
-//         placeholder="Enter Email"
-//         value={email}
-//         onChange={(e) => {
-//           setEmail(e.target.value);
-//           setMessage("");
-//         }}
+//     <form>
+//       <h1>IMS Login Page</h1>
+//       <div>
+//       <input type="email"
+//       placeholder="Enter your email"
+//       value={email}
 //       />
-
-//       <input
-//         type={showPassword ? "text" : "password"}
-//         placeholder="Enter Password"
-//         value={password}
-//         onChange={(e) => {
-//           setPassword(e.target.value);
-//           setMessage("");
-//         }}
+      
+//       <input type="Password"
+//       placeholder="Enter your Password"
+//       value={Password}
 //       />
-
-//       <button
-//         type="button"
-//         onClick={() => setShowPassword(!showPassword)}
-//       >
-//         {showPassword ? "Hide Password" : "Show Password"}
-//       </button>
-
-//       {message && (
-//         <p className="error-message">
-//           {message}
-//         </p>
-//       )}
-
-//       <button onClick={handleLogin}>
-//         Login
-//       </button>
-//     </div>
-//   );
-// }
-
-// // export default Login;
-// import { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import "./Login.css";
-
-// function Login() {
-//   const [showPassword, setShowPassword] = useState(false);
-//   const navigate = useNavigate();
-
-//   const handleLogin = (e) => {
-//     e.preventDefault();
-//     // ippatiki direct ga home ki pampu
-//     navigate("/home");
-//   };
-
-//   return (
-//     <div className="login-container">
-//       <div className="login-box">
-//         <div className="logo">
-//           <h1>📦 IMS</h1>
-//           <p>Inventory Management System</p>
-//         </div>
-
-//         <form onSubmit={handleLogin}>
-//           <div className="input-group">
-//             <label>Email</label>
-//             <input type="email" placeholder="admin@example.com" required />
-//           </div>
-
-//           <div className="input-group">
-//             <label>Password</label>
-//             <input 
-//               type={showPassword ? "text" : "password"} 
-//               placeholder="Enter Password" 
-//               required 
-//             />
-//           </div>
-
-//           <div className="options">
-//             <label className="checkbox">
-//               <input 
-//                 type="checkbox" 
-//                 onChange={() => setShowPassword(!showPassword)} 
-//               /> 
-//               Show Password
-//             </label>
-//             <Link to="#" className="forgot">Forgot?</Link>
-//           </div>
-
-//           <button type="submit" className="login-btn">Login</button>
-//         </form>
-
-//         <p className="register-link">
-//           Don't have an account? <Link to="/register">Sign Up</Link>
-//         </p>
+//       <button type="button"onClick={() =>setShowpassword(!Showpassword)}>
+//         {Showpassword ? "Hiden Password" : "Show Password"}</button>
+//         <br/>
+//         <button type = "button">Login</button>
 //       </div>
-//     </div>
-//   );
-// }
 
+
+//     </form>
+    
+  
+    
+
+//   )
+// };
 // export default Login;
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import Dashboard from "../Dashboard/Dashboard";
 
 function Login() {
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    navigate("/home");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    if (
+      email === "basheerun@gmail.com" &&
+      password === "Basheerun@123"
+    ) {
+      alert("✅ Login Successfully");
+      navigate("/dashboard");
+    } else {
+      alert("❌ Email or Password is Incorrect");
+    }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="logo">
-          <h1>📦 IMS</h1>
-          <p>Inventory Management System</p>
-        </div>
+    <form onSubmit={handleLogin} className="login-form">
+      <h1>🔐 IMS Login Page</h1>
 
-        <form onSubmit={handleLogin}>
-          <div className="input-group">
-            <label>Email</label>
-            <input type="email" placeholder="admin@example.com" required />
-          </div>
+      <input
+        type="email"
+        placeholder="Enter your Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-          <div className="input-group">
-            <label>Password</label>
-            <input 
-              type={showPassword ? "text" : "password"} 
-              placeholder="Enter Password" 
-              required 
-            />
-          </div>
+      <br /><br />
 
-          <div className="options">
-            <label>
-              <input type="checkbox" onChange={() => setShowPassword(!showPassword)} /> 
-              Show Password
-            </label>
-          </div>
+      <input
+        type={showPassword ? "text" : "password"}
+        placeholder="Enter your Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-          <button type="submit" className="login-btn">Login</button>
-        </form>
+      <br /><br />
 
-        <p className="register-link">
-          Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
-      </div>
-    </div>
+      <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? "🙈 Hide Password" : "👁️ Show Password"}
+      </button>
+
+      <br /><br />
+
+      <button type="submit">
+        🔑 Login
+      </button>
+    </form>
+//     <br />
+// <br />
+
+// <p className="register-text">
+//   Don't have an account?{" "}
+//   <span
+//     className="register-link"
+//     onClick={() => navigate("/register")}
+//   >
+//     Register here
+//   </span>
+// </p>
   );
 }
 
