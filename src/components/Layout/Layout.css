@@ -1,10 +1,51 @@
-.container {
+.layout {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
 }
 
-.main-content {
+
+/* Navbar top */
+.navbar {
+  height: 70px;
+}
+
+
+
+/* Sidebar + Content area */
+
+.layout-body {
+
+  display: flex;
+
   flex: 1;
-  padding: 20px;
-  background: #fefdfd;
-  min-height: calc(100vh - 60px); /* NavBar height minus */
+
+}
+
+
+
+/* Sidebar */
+
+.sidebar {
+
+  width: 250px;
+
+  min-height: calc(100vh - 70px);
+
+}
+
+
+
+/* Outlet pages area */
+
+.main-content {
+
+  flex: 1;
+
+  padding: 25px;
+
+  background: #f5f7fb;
+
+  overflow-y: auto;
+
 }

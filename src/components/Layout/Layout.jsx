@@ -1,45 +1,40 @@
-// import NavBar from "../NavBar/NavBar";
-// // import Sidebar from "../Sidebar/Sidebar";
-// // import Login from "../Login/Login";
-// import { Outlet } from "react-router-dom";
-// import "./Layout.css";
-
-// function Layout() {
-//   return (
-//     <div>
-//       <NavBar />
-//       <div className="container">
-//         {/* <Sidebar /> */}
-//         {/* <Login/> */}
-//         <div className="main-content">
-//           <Outlet /> 
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Layout;
 import NavBar from "../NavBar/NavBar";
 import Sidebar from "../Sidebar/Sidebar";
+import Footer from "../Footer/Footer";
 import { Outlet } from "react-router-dom";
 import "./Layout.css";
 
-function Layout() {
+
+function Layout({ setIsLoggedIn }) {
+
   return (
     <div className="layout">
+
       <NavBar />
 
-      <div className="container">
-        <Sidebar />
-        <div className="main-content">
+
+      <div className="layout-body">
+
+        <Sidebar 
+          setIsLoggedIn={setIsLoggedIn}
+        />
+
+
+        <main className="main-content">
+
           <Outlet />
-        </div>
+
+        </main>
 
       </div>
+      
+
+
+      <Footer />
 
     </div>
   );
 }
+
 
 export default Layout;

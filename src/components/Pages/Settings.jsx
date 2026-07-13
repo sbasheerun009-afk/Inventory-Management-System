@@ -1,59 +1,65 @@
 import { useState } from "react";
-import "./Setting.css";
+import "./Settings.css";
 
-function Setting() {
-  const [companyName, setCompanyName] = useState("Inventory Management System");
-  const [adminName, setAdminName] = useState("Admin");
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [theme, setTheme] = useState("Light");
+function Settings() {
+  const [notifications, setNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleSave = () => {
-    alert("Settings Saved Successfully!");
+    alert("✅ Settings saved successfully!");
   };
 
   return (
-    <div className="setting-container">
+    <div className="settings">
       <h2>⚙️ Settings</h2>
 
-      <div className="setting-form">
+      <div className="settings-card">
+        <h3>Application Settings</h3>
 
-        <label>Company Name</label>
-        <input
-          type="text"
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-        />
+        <p>
+          <strong>👤 Username:</strong> Admin
+        </p>
 
-        <label>Admin Name</label>
-        <input
-          type="text"
-          value={adminName}
-          onChange={(e) => setAdminName(e.target.value)}
-        />
+        <p>
+          <strong>📧 Email:</strong> admin@gmail.com
+        </p>
 
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <p>
+          <strong>🏢 Application:</strong> Inventory Management System
+        </p>
 
-        <label>Theme</label>
-        <select
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-        >
-          <option>Light</option>
-          <option>Dark</option>
-        </select>
+        <hr />
 
-        <button onClick={handleSave}>
-          💾 Save Settings
+        <h4>Preferences</h4>
+
+        <div className="option">
+          <label>
+            <input
+              type="checkbox"
+              checked={notifications}
+              onChange={() => setNotifications(!notifications)}
+            />
+            Enable Notifications
+          </label>
+        </div>
+
+        <div className="option">
+          <label>
+            <input
+              type="checkbox"
+              checked={darkMode}
+              onChange={() => setDarkMode(!darkMode)}
+            />
+            Dark Mode
+          </label>
+        </div>
+
+        <button className="save-btn" onClick={handleSave}>
+          💾 Save Changes
         </button>
-
       </div>
     </div>
   );
 }
 
-export default Setting;
+export default Settings;

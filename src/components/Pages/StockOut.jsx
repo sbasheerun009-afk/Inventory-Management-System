@@ -1,136 +1,50 @@
-// import "../Products/Product.css";
-
-// function StockOut() {
-//   const stockOut = [
-//     {
-//       id: 1,
-//       name: "Laptop",
-//       category: "Electronics",
-//       customer: "Hotel Taj",
-//       quantity: 5,
-//       date: "2026-04-21",
-//       status: "Issued",
-//     },
-//     {
-//       id: 2,
-//       name: "Mouse",
-//       category: "Electronics",
-//       customer: "Office Supplies",
-//       quantity: 20,
-//       date: "2026-04-20",
-//       status: "Issued",
-//     },
-//     {
-//       id: 3,
-//       name: "Keyboard",
-//       category: "Electronics",
-//       customer: "College",
-//       quantity: 10,
-//       date: "2026-04-19",
-//       status: "Pending",
-//     },
-//     {
-//       id: 4,
-//       name: "School Bag",
-//       category: "Bags",
-//       customer: "School",
-//       quantity: 30,
-//       date: "2026-04-18",
-//       status: "Issued",
-//     },
-//   ];
-
-//   return (
-//     <div className="products">
-//       <h2>Stock Out</h2>
-
-//       <div className="top-bar">
-//         <button className="add-btn">+ Issue Stock</button>
-
-//         <input
-//           type="text"
-//           placeholder="Search Stock Out..."
-//           className="search"
-//         />
-//       </div>
-
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>ID</th>
-//             <th>Product Name</th>
-//             <th>Category</th>
-//             <th>Customer</th>
-//             <th>Quantity</th>
-//             <th>Date</th>
-//             <th>Status</th>
-//             <th>Action</th>
-//           </tr>
-//         </thead>
-
-//         <tbody>
-//           {stockOut.map((item) => (
-//             <tr key={item.id}>
-//               <td>{item.id}</td>
-//               <td>{item.name}</td>
-//               <td>{item.category}</td>
-//               <td>{item.customer}</td>
-//               <td>{item.quantity}</td>
-//               <td>{item.date}</td>
-//               <td style={{ 
-//                 color: item.status === "Issued" ? "#22c55e" : "#f97316",
-//                 fontWeight: "500"
-//               }}>
-//                 {item.status}
-//               </td>
-//               <td>
-//                 <button>Edit</button>
-//                 <button>Delete</button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-
-// export default StockOut;
 import "../Products/Product.css";
 
 function StockOut({ products, setProducts }) {
 
   const stockOutProduct = (id) => {
+    const selectedProduct = products.find(
+      (product) => product.id === id
+    );
+
+    if (selectedProduct.quantity === 0) {
+      alert("❌ Stock is not available!");
+      return;
+    }
+
     const updatedProducts = products.map((product) => {
       if (product.id === id) {
-        if (product.quantity > 0) {
-          return {
-            ...product,
-            quantity: product.quantity - 1,
-          };
-        } else {
-          alert("Stock is not available!");
-        }
+        return {
+          ...product,
+          quantity: product.quantity - 1,
+        };
       }
+
       return product;
     });
 
     setProducts(updatedProducts);
+
+    alert("✅ Stock issued successfully!");
   };
+
 
   return (
     <div className="products">
-      <h2>Stock Out</h2>
+
+      <h2>📤 Stock Out</h2>
 
       <div className="top-bar">
         <input
           type="text"
-          placeholder="Search Product..."
+          placeholder="🔍 Search Product..."
           className="search"
         />
       </div>
 
+
       <table>
+
         <thead>
           <tr>
             <th>ID</th>
@@ -143,60 +57,75 @@ function StockOut({ products, setProducts }) {
           </tr>
         </thead>
 
+
         <tbody>
+
           {products.length > 0 ? (
+
             products.map((item) => (
+
               <tr key={item.id}>
+
                 <td>{item.id}</td>
+
                 <td>{item.name}</td>
+
                 <td>{item.category}</td>
+
                 <td>₹{item.price}</td>
+
                 <td>{item.quantity}</td>
 
-                <td
-                  style={{
-                    color:
-                      item.quantity === 0
-                        ? "red"
-                        : item.quantity < 5
-                        ? "orange"
-                        : "green",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {item.quantity === 0
-                    ? "Out of Stock"
-                    : item.quantity < 5
-                    ? "Low Stock"
-                    : "In Stock"}
-                </td>
 
                 <td>
+                  {
+                    item.quantity === 0 ? (
+                      <span className="out-stock">
+                        Out of Stock
+                      </span>
+                    ) : item.quantity < 5 ? (
+                      <span className="low-stock">
+                        Low Stock
+                      </span>
+                    ) : (
+                      <span className="in-stock">
+                        In Stock
+                      </span>
+                    )
+                  }
+                </td>
+
+
+                <td>
+
                   <button
                     className="btn-remove"
+                    disabled={item.quantity === 0}
                     onClick={() => stockOutProduct(item.id)}
                   >
                     - Issue Stock
                   </button>
+
                 </td>
+
               </tr>
+
             ))
+
           ) : (
+
             <tr>
-              <td
-                colSpan="7"
-                style={{
-                  textAlign: "center",
-                  padding: "20px",
-                  fontWeight: "bold",
-                }}
-              >
+              <td colSpan="7">
                 No Products Available
               </td>
             </tr>
+
           )}
+
         </tbody>
+
       </table>
+
     </div>
   );
 }

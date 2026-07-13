@@ -1,159 +1,164 @@
-// import {useState} from "react";
-// function Login(){
-//   const [email,setEmail] = useState("")
-//   const [Password, setPassword] = useState("")
-//   const [showpassword, setShowpassword] = useState(false)
-//   // const [login, setLogin] = useState("")
-//   const handleemail = (event) => {
-//     setEmail(event.target.value)
-//   }
-//   const handlepassword = (event) => {
-//     setPassword(event.target.value)
-//   }
-//   const handlehowpassword = (event) => {
-//     setShowpassword(event.target.value)
-//   }
-//     if(email === "basheerun@gmail.com"&& Password==="Basheerun@123")
-//       alert("Login sucsessfully")
-//     else{
-//       alert("Email and Password Incorrect")
-//     }
-//   return (
-//     <form>
-//       <h1>IMS Login Page</h1>
-//       <div>
-//       <input type="email"
-//       placeholder="Enter your email"
-//       value={email}
-//       />
-      
-//       <input type="Password"
-//       placeholder="Enter your Password"
-//       value={Password}
-//       />
-//       <button type="button"onClick={() =>setShowpassword(!Showpassword)}>
-//         {Showpassword ? "Hiden Password" : "Show Password"}</button>
-//         <br/>
-//         <button type = "button">Login</button>
-//       </div>
-
-
-//     </form>
-    
-  import { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
+
 
 function Login({ setIsLoggedIn }) {
 
   const navigate = useNavigate();
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
 
-  const handleLogin = (event) => {
 
-    event.preventDefault();
+  const handleLogin = (e) => {
 
-
-    if (
-      email === "basheerun@gmail.com" &&
-      password === "Basheerun@123"
-    ) {
-
-      alert("✅ Login Successfully");
+    e.preventDefault();
 
 
-      // Save login status
-      localStorage.setItem("login", "true");
+    if(email === "admin@gmail.com" && password === "12345"){
 
+      localStorage.setItem("login","true");
 
-      // Update login state
       setIsLoggedIn(true);
 
+      alert("✅ Login Successful");
 
-      // Open Dashboard after login
       navigate("/dashboard");
 
+    }
+    else{
 
-    } else {
-
-      alert("❌ Email or Password is Incorrect");
+      alert("❌ Invalid Email or Password");
 
     }
 
   };
 
 
+
   return (
 
-    <form 
-      onSubmit={handleLogin} 
-      className="login-form"
-    >
-
-      <h1>🔐 IMS Login Page</h1>
+    <div className="login-page">
 
 
-      <input
-        type="email"
-        placeholder="Enter your Email"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-      />
+      <div className="login-card">
 
 
-      <br />
-      <br />
+        <div className="login-header">
+
+          <div className="logo">
+            📦
+          </div>
+
+          <h1>
+            Inventory Management System
+          </h1>
+
+          <p>
+            Login to manage your inventory
+          </p>
+
+        </div>
 
 
-      <input
-        type={showPassword ? "text" : "password"}
-        placeholder="Enter your Password"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
-      />
+
+        <form onSubmit={handleLogin}>
 
 
-      <br />
-      <br />
+          <label>
+            Email
+          </label>
+
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
+            required
+          />
 
 
-      <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-      >
 
-        {showPassword 
-          ? "🙈 Hide Password" 
-          : "👁️ Show Password"}
-
-      </button>
+          <label>
+            Password
+          </label>
 
 
-      <br />
-      <br />
+          <div className="password-box">
+
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
+              required
+            />
 
 
-      <button type="submit">
-        🔑 Login
-      </button>
+            <span
+              onClick={()=>setShowPassword(!showPassword)}
+            >
+
+              {showPassword ? "🙈" : "👁️"}
+
+            </span>
 
 
-      <p>
-        Don't have an account?{" "}
-        <Link to="/register">
-          Register
-        </Link>
-      </p>
+          </div>
 
 
-    </form>
+
+          <button className="login-btn">
+            🔐 Login
+          </button>
+
+
+        </form>
+
+
+
+        <p className="register-text">
+
+          Don't have an account?
+
+          <Link to="/register">
+            Register Here
+          </Link>
+
+        </p>
+
+
+
+        <div className="demo-login">
+
+          <p>
+            Demo Login
+          </p>
+
+          <span>
+            Email: admin@gmail.com
+          </span>
+
+          <span>
+            Password: 12345
+          </span>
+
+        </div>
+
+
+
+      </div>
+
+
+    </div>
 
   );
 
 }
+
 
 export default Login;

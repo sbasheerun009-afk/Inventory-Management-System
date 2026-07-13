@@ -1,45 +1,119 @@
-// import { Link } from "react-router-dom"; 
-// import "./NavBar.css";
-
-// function NavBar() {
-//   return (
-//     <nav className="navbar">
-//       <h2>🏢Inventory Management System</h2>
-      
-//       <input type="text" placeholder="🔍 Search" />
-
-//       <div className="nav-right">
-//         <span>👤 Admin</span>
-//         <button onClick={() => navigate("/login")}>
-//   Login
-// </button>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default NavBar;
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
+
 function NavBar() {
+
   const navigate = useNavigate();
 
-  return (
-    <nav className="navbar">
-      <h2>🏢 Inventory Management System</h2>
+  const [search, setSearch] = useState("");
 
-      <input type="text" placeholder="🔍 Search" />
+
+
+  const handleSearch = (e) => {
+
+    e.preventDefault();
+
+
+    const page = search.toLowerCase();
+
+
+
+    if(page.includes("dashboard")){
+      navigate("/dashboard");
+    }
+
+    else if(page.includes("product")){
+      navigate("/products");
+    }
+
+    else if(page.includes("categorie")){
+      navigate("/categories");
+    }
+
+    else if(page.includes("stock in")){
+      navigate("/stockin");
+    }
+
+    else if(page.includes("stock out")){
+      navigate("/stockout");
+    }
+
+    else if(page.includes("supplier")){
+      navigate("/suppliers");
+    }
+
+    else if(page.includes("order")){
+      navigate("/orders");
+    }
+
+    else if(page.includes("report")){
+      navigate("/reports");
+    }
+
+    else{
+
+      alert("Page not found");
+
+    }
+
+
+    setSearch("");
+
+  };
+
+
+
+
+  return (
+
+    <nav className="navbar">
+
+
+      <h2>
+        🏢 Inventory Management System
+      </h2>
+
+
+
+      <form onSubmit={handleSearch}>
+
+
+        <input
+
+          type="text"
+
+          placeholder="🔍 Search Page..."
+
+          value={search}
+
+          onChange={(e)=>setSearch(e.target.value)}
+
+        />
+
+
+      </form>
+
+
+
 
       <div className="nav-right">
-        <span>👤 Admin</span>
 
-        <button onClick={() => navigate("/login")}>
-          Login
-        </button>
+        <span>
+          👤 Admin
+        </span>
+
+
       </div>
+
+
+
     </nav>
+
   );
+
 }
+
 
 export default NavBar;

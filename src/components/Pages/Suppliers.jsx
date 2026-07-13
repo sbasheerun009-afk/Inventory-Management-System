@@ -1,39 +1,204 @@
-function Products() {
-  const products = [
-    { id: 1, name: "Laptop", category: "Electronics", price: 50000, quantity: 20, status: "In Stock" },
-    { id: 2, name: "Mouse", category: "Electronics", price: 1000, quantity: 5, status: "Low Stock" },
-    { id: 3, name: "Keyboard", category: "Electronics", price: 2000, quantity: 0, status: "Out of Stock" },
-    { id: 4, name: "School Bag", category: "Bags", price: 1000, quantity: 50, status: "In Stock" },
-  ];
+import { useState } from "react";
+import "./Suppliers.css";
+
+function Suppliers() {
+
+  const [search, setSearch] = useState("");
+
+  const [suppliers, setSuppliers] = useState([
+    {
+      id: 1,
+      name: "ABC Electronics",
+      contact: "9876543210",
+      email: "abc@gmail.com",
+      address: "Hyderabad"
+    },
+    {
+      id: 2,
+      name: "Global Traders",
+      contact: "9123456780",
+      email: "global@gmail.com",
+      address: "Vijayawada"
+    },
+    {
+      id: 3,
+      name: "Sri Lakshmi Suppliers",
+      contact: "9988776655",
+      email: "lakshmi@gmail.com",
+      address: "Guntur"
+    }
+  ]);
+
+
+  const addSupplier = () => {
+
+    const name = prompt("Enter Supplier Name");
+    const contact = prompt("Enter Contact Number");
+    const email = prompt("Enter Email");
+    const address = prompt("Enter Address");
+
+
+    if(name && contact && email && address){
+
+      const newSupplier = {
+        id: Date.now(),
+        name,
+        contact,
+        email,
+        address
+      };
+
+
+      setSuppliers([
+        ...suppliers,
+        newSupplier
+      ]);
+
+    }
+
+  };
+
+
+
+  const deleteSupplier = (id) => {
+
+    const confirmDelete = window.confirm(
+      "Delete this supplier?"
+    );
+
+
+    if(confirmDelete){
+
+      setSuppliers(
+        suppliers.filter(
+          (supplier)=>supplier.id !== id
+        )
+      );
+
+    }
+
+  };
+
+
+
+  const filteredSuppliers = suppliers.filter(
+    (supplier)=>
+      supplier.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
 
   return (
-    <div className="products">
-      <h2>Products</h2>
+
+    <div className="suppliers">
+
+
+      <h2>🚚 Suppliers</h2>
+
+
       <div className="top-bar">
-        <button className="add-btn">+ Add Product</button>
-        <input type="text" placeholder="Search Product..." className="search" />
+
+
+        <button
+          className="add-btn"
+          onClick={addSupplier}
+        >
+          ➕ Add Supplier
+        </button>
+
+
+
+        <input
+          type="text"
+          placeholder="🔍 Search Supplier..."
+          className="search"
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
+        />
+
+
       </div>
+
+
+
+
       <table>
+
+
         <thead>
-          <tr><th>ID</th><th>Product Name</th><th>Category</th><th>Price</th><th>Quantity</th><th>Status</th><th>Action</th></tr>
+
+          <tr>
+            <th>ID</th>
+            <th>Supplier Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Action</th>
+          </tr>
+
         </thead>
+
+
+
         <tbody>
-          {products.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>₹{item.price}</td>
-              <td>{item.quantity}</td>
-              <td style={{ color: item.status === "In Stock" ? "#22c55e" : item.status === "Low Stock" ? "#f97316" : "#ef4444" }}>
-                {item.status}
+
+
+        {
+          filteredSuppliers.length > 0 ? (
+
+            filteredSuppliers.map((supplier)=>(
+
+              <tr key={supplier.id}>
+
+                <td>{supplier.id}</td>
+
+                <td>{supplier.name}</td>
+
+                <td>{supplier.contact}</td>
+
+                <td>{supplier.email}</td>
+
+                <td>{supplier.address}</td>
+
+
+                <td>
+
+                  <button
+                    className="delete-btn"
+                    onClick={()=>deleteSupplier(supplier.id)}
+                  >
+                    🗑 Delete
+                  </button>
+
+                </td>
+
+              </tr>
+
+            ))
+
+          ) : (
+
+            <tr>
+              <td colSpan="6">
+                No Suppliers Available
               </td>
-              <td><button>Edit</button><button>Delete</button></td>
             </tr>
-          ))}
+
+          )
+        }
+
+
         </tbody>
+
+
       </table>
+
+
     </div>
+
   );
 }
-export default Products;
+
+
+export default Suppliers;
