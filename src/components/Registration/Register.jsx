@@ -23,11 +23,9 @@ function Register() {
       alert("Passwords do not match!");
       return;
     }
-
-    // ippudu API call cheyali. Ippatiki direct ga dashboard ki pampistham
     console.log("Register Data:", formData);
     alert("Registration Successful!");
-    navigate("/login"); // register ayyaka login page ki
+    navigate("/login"); 
   };
 
   return (

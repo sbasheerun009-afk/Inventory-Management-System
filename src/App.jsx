@@ -42,6 +42,7 @@ import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
+import HomePage from "./components/Pages/HomePage";
 
 // Components
 import Login from "./components/Login/Login";
@@ -53,6 +54,7 @@ import StockOut from "./components/Pages/StockOut";
 import Suppliers from "./components/Pages/Suppliers";
 import Orders from "./components/Pages/Orders/Orders";
 import Reports from "./components/Pages/Reports";
+import Register from "./components/Registration/Register";
 
 // Initial Products
 const initialProducts = [
@@ -104,144 +106,136 @@ function App() {
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState(initialCategories);
 
-
-  // Login Status
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("login") === "true"
   );
+return (
+  <Routes>
+    <Route 
+      path="/" 
+      element={<HomePage />} 
+    />
 
+    <Route 
+      path="/home" 
+      element={<HomePage />} 
+    />
+    <Route
+      path="/login"
+      element={
+        <Login 
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      }
+    />
+    <Route
+      path="/register"
+      element={<Register />}
+    />
+    <Route
+      element={
+        isLoggedIn 
+        ? <Layout /> 
+        : <Navigate to="/login" replace />
+      }
+    >
 
-  return (
-    <Routes>
-
-      {/* Login Page */}
       <Route
-        path="/login"
+        path="/dashboard"
         element={
-          <Login 
-            setIsLoggedIn={setIsLoggedIn}
+          <Dashboard
+            products={products}
+            setProducts={setProducts}
+            orders={orders}
+            setOrders={setOrders}
           />
         }
       />
 
 
-      {/* Protected Routes */}
       <Route
+        path="/products"
         element={
-          isLoggedIn 
-          ? <Layout /> 
-          : <Navigate to="/login" replace />
-        }
-      >
-
-
-        <Route
-          path="/"
-          element={
-            <Navigate to="/dashboard" replace />
-          }
-        />
-
-
-        <Route
-          path="/dashboard"
-          element={
-            <Dashboard
-              products={products}
-              setProducts={setProducts}
-              orders={orders}
-              setOrders={setOrders}
-            />
-          }
-        />
-
-
-        <Route
-          path="/products"
-          element={
-            <Products
-              products={products}
-              setProducts={setProducts}
-            />
-          }
-        />
-
-
-        <Route
-          path="/categories"
-          element={
-            <Categories
-              categories={categories}
-              setCategories={setCategories}
-            />
-          }
-        />
-
-
-        <Route
-          path="/stockin"
-          element={
-            <StockIn
-              products={products}
-              setProducts={setProducts}
-            />
-          }
-        />
-
-
-        <Route
-          path="/stockout"
-          element={
-            <StockOut
-              products={products}
-              setProducts={setProducts}
-            />
-          }
-        />
-
-
-        <Route
-          path="/suppliers"
-          element={<Suppliers />}
-        />
-
-
-        <Route
-          path="/orders"
-          element={
-            <Orders
-              orders={orders}
-              setOrders={setOrders}
-              products={products}
-              setProducts={setProducts}
-            />
-          }
-        />
-
-
-        <Route
-          path="/reports"
-          element={
-            <Reports
-              products={products}
-              orders={orders}
-            />
-          }
-        />
-
-      </Route>
-
-
-      {/* Wrong URL */}
-      <Route
-        path="*"
-        element={
-          <Navigate to="/login" replace />
+          <Products
+            products={products}
+            setProducts={setProducts}
+          />
         }
       />
 
-    </Routes>
-  );
-}
 
+      <Route
+        path="/categories"
+        element={
+          <Categories
+            categories={categories}
+            setCategories={setCategories}
+          />
+        }
+      />
+
+
+      <Route
+        path="/stockin"
+        element={
+          <StockIn
+            products={products}
+            setProducts={setProducts}
+          />
+        }
+      />
+
+
+      <Route
+        path="/stockout"
+        element={
+          <StockOut
+            products={products}
+            setProducts={setProducts}
+          />
+        }
+      />
+
+
+      <Route
+        path="/suppliers"
+        element={<Suppliers />}
+      />
+
+
+      <Route
+        path="/orders"
+        element={
+          <Orders
+            orders={orders}
+            setOrders={setOrders}
+            products={products}
+            setProducts={setProducts}
+          />
+        }
+      />
+
+
+      <Route
+        path="/reports"
+        element={
+          <Reports
+            products={products}
+            orders={orders}
+          />
+        }
+      />
+
+
+    </Route>
+    <Route
+      path="*"
+      element={
+        <Navigate to="/" replace />
+      }
+    />
+
+
+  </Routes>
+)};
 export default App;

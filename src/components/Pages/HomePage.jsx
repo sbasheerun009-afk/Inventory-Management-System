@@ -1,61 +1,146 @@
+ 
+
+// import "./HomePage.css";
+// import { useNavigate } from "react-router-dom";
+// import bgImage from "../../assets/ims.jpeg";
+
+// function HomePage() {
+//   const navigate = useNavigate();
+
+//   return (
+//     <div className="home">
+//        style={{
+//     backgroundImage: `url(${bgImage})`,
+//   }}
+
+//       <div className="hero">
+//         <h1>📦 Inventory Management System</h1>
+
+//         <p>
+//           Manage your inventory efficiently with real-time stock tracking,
+//           product management, supplier records, and sales monitoring.
+//         </p>
+
+//         <button onClick={() => navigate("/dashboard")}>
+//           🚀 Go to Dashboard
+//         </button>
+//       </div>
+
+//       <div className="features">
+
+//         <div className="card">
+//           <h2>📦 Products</h2>
+//           <p>
+//             Add, edit, delete and organize products easily.
+//           </p>
+//         </div>
+
+//         <div className="card">
+//           <h2>📊 Stock</h2>
+//           <p>
+//             Monitor stock availability and receive low stock alerts.
+//           </p>
+//         </div>
+
+//         <div className="card">
+//           <h2>🏢 Suppliers</h2>
+//           <p>
+//             Store supplier information and manage purchases.
+//           </p>
+//         </div>
+
+//         <div className="card">
+//           <h2>🛒 Orders</h2>
+//           <p>
+//             Track customer orders and purchase history.
+//           </p>
+//         </div>
+
+//         <div className="card">
+//           <h2>📈 Reports</h2>
+//           <p>
+//             Generate sales and inventory reports instantly.
+//           </p>
+//         </div>
+
+//         <div className="card">
+//           <h2>🔒 Secure</h2>
+//           <p>
+//             Safe login system with role-based access.
+//           </p>
+//         </div>
+
+//       </div>
+
+//     </div>
+//   );
+// }
+
+// export default HomePage;
 import "./HomePage.css";
+import { useNavigate } from "react-router-dom";
+import bgImage from "../../assets/ims.jpeg";
 
 function HomePage() {
+  const navigate = useNavigate();
+
   return (
-    <div className="homepage">
-      <h1>Welcome to Inventory Management System</h1>
-      
-      <div className="stats-container">
-        <div className="stat-card">
-          <h3>Total Products</h3>
-          <p>250</p>
-        </div>
+    <div
+      className="home"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+      }}
+    >
+      <div className="hero">
+        <h1>📦 Inventory Management System</h1>
 
-        <div className="stat-card">
-          <h3>Total Sales</h3>
-          <p>₹45,000</p>
-        </div>
+        <p>
+          Manage your inventory efficiently with real-time stock tracking,
+          product management, supplier records, supplier management,
+          and sales monitoring.
+        </p>
 
-        <div className="stat-card">
-          <h3>Low Stock Items</h3>
-          <p>12</p>
-        </div>
-
-        <div className="stat-card">
-          <h3>Total Users</h3>
-          <p>5</p>
-        </div>
+        <button onClick={() => navigate("/login")}>
+          🚀 login to dashboard  
+        </button>
       </div>
 
-      <div className="recent-activity">
-        <h2>Recent Activity</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Product</th>
-              <th>Action</th>
-              <th>Qty</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>21 Apr 2026</td>
-              <td>Laptop</td>
-              <td>Sold</td>
-              <td>2</td>
-            </tr>
-            <tr>
-              <td>20 Apr 2026</td>
-              <td>Mouse</td>
-              <td>Stock In</td>
-              <td>10</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="features">
+        <div className="card">
+          <h2>📦 Products</h2>
+          <p>Add, edit, delete and organize products easily.</p>
+        </div>
+
+        <div className="card">
+          <h2>📊 Stock</h2>
+          <p>Monitor stock availability and receive low stock alerts.</p>
+        </div>
+
+        <div className="card">
+          <h2>🏢 Suppliers</h2>
+          <p>Store supplier information and manage purchases.</p>
+        </div>
+
+        <div className="card">
+          <h2>🛒 Orders</h2>
+          <p>Track customer orders and purchase history.</p>
+        </div>
+
+        <div className="card">
+          <h2>📈 Reports</h2>
+          <p>Generate sales and inventory reports instantly.</p>
+        </div>
+
+        <div className="card">
+          <h2>🔒 Secure</h2>
+          <p>Safe login system with role-based access.</p>
+          <button onClick={() => navigate("/login")}>
+   🔐 Login
+</button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default HomePage; // idi chala important
+export default HomePage;
