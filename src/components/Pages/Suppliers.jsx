@@ -1,33 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Suppliers.css";
 
 function Suppliers() {
 
   const [search, setSearch] = useState("");
 
-  const [suppliers, setSuppliers] = useState([
-    {
-      id: 1,
-      name: "ABC Electronics",
-      contact: "9876543210",
-      email: "abc@gmail.com",
-      address: "Hyderabad"
-    },
-    {
-      id: 2,
-      name: "Global Traders",
-      contact: "9123456780",
-      email: "global@gmail.com",
-      address: "Vijayawada"
-    },
-    {
-      id: 3,
-      name: "Sri Lakshmi Suppliers",
-      contact: "9988776655",
-      email: "lakshmi@gmail.com",
-      address: "Guntur"
-    }
-  ]);
+  const [suppliers, setSuppliers] = useState(
+    JSON.parse(localStorage.getItem("suppliers")) || [
+      {
+        id: 1,
+        name: "ABC Electronics",
+        contact: "9876543210",
+        email: "abc@gmail.com",
+        address: "Hyderabad",
+      },
+      {
+        id: 2,
+        name: "Global Traders",
+        contact: "9123456780",
+        email: "global@gmail.com",
+        address: "Vijayawada",
+      },
+      {
+        id: 3,
+        name: "Sri Lakshmi Suppliers",
+        contact: "9988776655",
+        email: "lakshmi@gmail.com",
+        address: "Guntur",
+      },
+    ]
+  );
+
+
+  // Save Suppliers Data in Local Storage
+  useEffect(() => {
+
+    localStorage.setItem(
+      "suppliers",
+      JSON.stringify(suppliers)
+    );
+
+  }, [suppliers]);
+
 
 
   const addSupplier = () => {
@@ -38,14 +52,16 @@ function Suppliers() {
     const address = prompt("Enter Address");
 
 
-    if(name && contact && email && address){
+    if (name && contact && email && address) {
 
       const newSupplier = {
+
         id: Date.now(),
         name,
         contact,
         email,
-        address
+        address,
+
       };
 
 
@@ -53,6 +69,8 @@ function Suppliers() {
         ...suppliers,
         newSupplier
       ]);
+
+      alert("Supplier Added Successfully");
 
     }
 
@@ -71,9 +89,11 @@ function Suppliers() {
 
       setSuppliers(
         suppliers.filter(
-          (supplier)=>supplier.id !== id
+          (supplier)=> supplier.id !== id
         )
       );
+
+      alert("Supplier Deleted");
 
     }
 
@@ -87,6 +107,7 @@ function Suppliers() {
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+
 
 
   return (
@@ -110,16 +131,21 @@ function Suppliers() {
 
 
         <input
+
           type="text"
+
           placeholder="🔍 Search Supplier..."
+
           className="search"
+
           value={search}
+
           onChange={(e)=>setSearch(e.target.value)}
+
         />
 
 
       </div>
-
 
 
 
@@ -129,12 +155,14 @@ function Suppliers() {
         <thead>
 
           <tr>
+
             <th>ID</th>
             <th>Supplier Name</th>
             <th>Contact</th>
             <th>Email</th>
             <th>Address</th>
             <th>Action</th>
+
           </tr>
 
         </thead>
@@ -165,27 +193,44 @@ function Suppliers() {
                 <td>
 
                   <button
+
                     className="delete-btn"
+
                     onClick={()=>deleteSupplier(supplier.id)}
+
                   >
+
                     🗑 Delete
+
                   </button>
+
 
                 </td>
 
+
               </tr>
+
 
             ))
 
-          ) : (
+          )
+
+          :
+
+          (
 
             <tr>
+
               <td colSpan="6">
+
                 No Suppliers Available
+
               </td>
+
             </tr>
 
           )
+
         }
 
 
@@ -198,6 +243,7 @@ function Suppliers() {
     </div>
 
   );
+
 }
 
 

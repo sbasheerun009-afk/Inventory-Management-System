@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
 import "./Product.css";
 
 
@@ -104,14 +105,6 @@ function Products({ products, setProducts, orders, setOrders }) {
 
 
   };
-
-
-
-
-
-
-
-
   // DELETE PRODUCT
 
   const deleteProduct=(id)=>{
@@ -129,15 +122,6 @@ function Products({ products, setProducts, orders, setOrders }) {
 
 
   };
-
-
-
-
-
-
-
-
-
   // ORDER PRODUCT
 
   const orderProduct=(product)=>{

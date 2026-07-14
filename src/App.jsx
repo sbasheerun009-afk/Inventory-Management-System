@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Layout from "./components/Layout/Layout";
 import HomePage from "./components/Pages/HomePage";
+import NotFound from "./components/Pages/NotFound/NotFound";
 
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -15,6 +15,7 @@ import Suppliers from "./components/Pages/Suppliers";
 import Orders from "./components/Pages/Orders/Orders";
 import Reports from "./components/Pages/Reports";
 import Register from "./components/Registration/Register";
+import ProductDetails from "./components/Products/ProductDetails";
 
 
 const initialProducts = [
@@ -58,41 +59,58 @@ const initialCategories = [
   { id: 24, name: "Pet Supplies", description: "Pet Food and Accessories" },
   { id: 25, name: "Others", description: "Miscellaneous Products" }
 ];
-
 function App() {
+// const [products, setProducts] = useState(initialProducts);
+const [products, setProducts] = useState(
+  JSON.parse(localStorage.getItem("products")) || initialProducts
+);
+// const [categories, setCategories] = useState(initialCategories);
+const [categories, setCategories] = useState(
+ JSON.parse(localStorage.getItem("categories")) || initialCategories
+);
+// const [orders, setOrders] = useState([]);
+const [orders, setOrders] = useState(
+  JSON.parse(localStorage.getItem("orders")) || []
+);
+const [isLoggedIn, setIsLoggedIn] = useState(
+  localStorage.getItem("login") === "true"
+);
+    useEffect(() => {
 
-  const [products, setProducts] = useState(initialProducts);
-
-  const [categories, setCategories] = useState(initialCategories);
-
-  const [orders, setOrders] = useState([]);
-
-
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("login") === "true"
+  localStorage.setItem(
+    "products",
+    JSON.stringify(products)
   );
+
+}, [products]);
+useEffect(() => {
+
+  localStorage.setItem(
+    "orders",
+    JSON.stringify(orders)
+  );
+
+},[orders]);
+useEffect(()=>{
+
+ localStorage.setItem(
+   "categories",
+   JSON.stringify(categories)
+ );
+
+},[categories]);
 return (
-
   <Routes>
-
-
-    {/* HOME PAGE */}
 
     <Route
       path="/"
       element={<HomePage />}
     />
 
-
     <Route
       path="/home"
       element={<HomePage />}
     />
-
-
-
-
-    {/* LOGIN */}
 
     <Route
       path="/login"
@@ -103,275 +121,117 @@ return (
       }
     />
 
-
-
-
-    {/* REGISTER */}
-
     <Route
       path="/register"
       element={<Register />}
     />
 
-
-
-
-
-
-    {/* PROTECTED ROUTES */}
-
     <Route
-
       element={
-
-        isLoggedIn
-
-        ?
-
-        <Layout setIsLoggedIn={setIsLoggedIn} />
-
-        :
-
-        <Navigate to="/login" replace />
-
+        isLoggedIn ? (
+          <Layout setIsLoggedIn={setIsLoggedIn} />
+        ) : (
+          <Navigate to="/login" replace />
+        )
       }
-
     >
 
-
-
-
-
-      {/* DASHBOARD */}
-
       <Route
-
         path="/dashboard"
-
         element={
-
           <Dashboard
-
             products={products}
-
             setProducts={setProducts}
-
             orders={orders}
-
             setOrders={setOrders}
-
           />
-
         }
-
       />
 
-
-
-
-
-
-      {/* PRODUCTS */}
-
       <Route
-
         path="/products"
-
         element={
-
           <Products
-
             products={products}
-
             setProducts={setProducts}
-
             orders={orders}
-
             setOrders={setOrders}
-
           />
-
         }
-
+      />
+      <Route
+        path="/products/:id"
+        element={
+          <ProductDetails
+            products={products}
+          />
+        }
       />
 
-
-
-
-
-
-
-      {/* CATEGORIES */}
-
       <Route
-
         path="/categories"
-
         element={
-
           <Categories
-
             categories={categories}
-
             setCategories={setCategories}
-
           />
-
         }
-
       />
 
-
-
-
-
-
-
-      {/* STOCK IN */}
-
       <Route
-
         path="/stockin"
-
         element={
-
           <StockIn
-
             products={products}
-
             setProducts={setProducts}
-
           />
-
         }
-
       />
 
-
-
-
-
-
-
-      {/* STOCK OUT */}
-
       <Route
-
         path="/stockout"
-
         element={
-
           <StockOut
-
             products={products}
-
             setProducts={setProducts}
-
           />
-
         }
-
       />
 
-
-
-
-
-
-
-      {/* SUPPLIERS */}
-
       <Route
-
         path="/suppliers"
-
         element={<Suppliers />}
-
       />
 
-
-
-
-
-
-
-      {/* ORDERS */}
-
       <Route
-
         path="/orders"
-
         element={
-
           <Orders
-
             orders={orders}
-
             setOrders={setOrders}
-
             products={products}
-
             setProducts={setProducts}
-
           />
-
         }
-
       />
-
-
-
-
-
-
-
-      {/* REPORTS */}
 
       <Route
-
         path="/reports"
-
         element={
-
           <Reports
-
             products={products}
-
             orders={orders}
-
           />
-
         }
-
       />
-
-
-
-
 
     </Route>
+<Route
+  path="*"
+  element={<NotFound />}
+/>
 
-
-
-
-
-
-
-    {/* WRONG URL */}
-
-    <Route
-
-      path="*"
-
-      element={<Navigate to="/" replace />}
-
-    />
-
-
-
-
-  </Routes>
-
+</Routes>
 );
 }
 export default App;

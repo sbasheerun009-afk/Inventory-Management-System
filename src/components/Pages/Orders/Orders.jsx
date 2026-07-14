@@ -1,70 +1,38 @@
 import { useState } from "react";
 import "./Orders.css";
 
-
 function Orders({ orders, setOrders, products, setProducts }) {
 
-
   const [selectedProduct, setSelectedProduct] = useState("");
-
   const [quantity, setQuantity] = useState("");
-
-
-
 
 
   const placeOrder = () => {
 
-
-    if(!selectedProduct || !quantity){
-
+    if (!selectedProduct || !quantity) {
       alert("Please select product and quantity");
-
       return;
-
     }
-
-
 
 
     const product = products.find(
-
-      item => item.id === Number(selectedProduct)
-
+      (item) => item.id === Number(selectedProduct)
     );
 
 
-
-
-
-    if(!product){
-
+    if (!product) {
       alert("Product not found");
-
       return;
-
     }
 
 
-
-
-
-    if(product.quantity < Number(quantity)){
-
+    if (product.quantity < Number(quantity)) {
       alert("❌ Not enough stock");
-
       return;
-
     }
-
-
-
-
-
 
 
     const newOrder = {
-
 
       id: Date.now(),
 
@@ -76,60 +44,34 @@ function Orders({ orders, setOrders, products, setProducts }) {
 
       quantity: Number(quantity),
 
-      total:
+      total: product.price * Number(quantity),
 
-      product.price * Number(quantity),
-
-      status:"Completed"
-
+      status: "Completed"
 
     };
 
 
-
-
-
-
-
     setOrders([
-
       ...orders,
-
       newOrder
-
     ]);
 
 
 
+    const updatedProducts = products.map((item) => {
 
-
-
-    const updatedProducts = products.map(item=>{
-
-
-      if(item.id === product.id){
-
+      if (item.id === product.id) {
 
         return {
-
           ...item,
-
-          quantity:
-
-          item.quantity - Number(quantity)
-
+          quantity: item.quantity - Number(quantity)
         };
-
 
       }
 
-
       return item;
 
-
     });
-
-
 
 
 
@@ -137,21 +79,13 @@ function Orders({ orders, setOrders, products, setProducts }) {
 
 
 
-
-
     setSelectedProduct("");
 
     setQuantity("");
 
-
-
     alert("✅ Order Placed Successfully");
 
-
   };
-
-
-
 
 
 
@@ -159,25 +93,17 @@ function Orders({ orders, setOrders, products, setProducts }) {
 
     <div className="orders">
 
-
       <h2>
         🛒 Orders Management
       </h2>
 
 
-
-
-
       <div className="order-form">
 
 
-
         <select
-
           value={selectedProduct}
-
           onChange={(e)=>setSelectedProduct(e.target.value)}
-
         >
 
           <option value="">
@@ -185,33 +111,23 @@ function Orders({ orders, setOrders, products, setProducts }) {
           </option>
 
 
-
           {
+            products.map((item)=>(
 
-          products.map(item=>(
+              <option
+                key={item.id}
+                value={item.id}
+              >
 
-            <option
+                {item.name}
 
-              key={item.id}
+              </option>
 
-              value={item.id}
-
-            >
-
-              {item.name}
-
-            </option>
-
-
-          ))
-
+            ))
           }
 
 
         </select>
-
-
-
 
 
 
@@ -229,9 +145,6 @@ function Orders({ orders, setOrders, products, setProducts }) {
 
 
 
-
-
-
         <button onClick={placeOrder}>
 
           🛒 Place Order
@@ -239,12 +152,7 @@ function Orders({ orders, setOrders, products, setProducts }) {
         </button>
 
 
-
       </div>
-
-
-
-
 
 
 
@@ -254,120 +162,59 @@ function Orders({ orders, setOrders, products, setProducts }) {
 
 
 
-
-
       {
+        orders.length === 0 ? (
 
-      orders.length === 0 ?
+          <p className="empty">
+            No Orders Available
+          </p>
 
+        ) : (
 
-      (
+          <table>
 
-        <p className="empty">
+            <thead>
 
-          No Orders Available
+              <tr>
 
-        </p>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
 
-      )
+              </tr>
 
+            </thead>
+            <tbody>
+              {
+                orders.map((order)=>(
 
-      :
+                  <tr key={order.id}>
 
+                    <td>{order.id}</td>
 
-      (
+                    <td>{order.name}</td>
 
-      <table>
+                    <td>{order.category}</td>
 
+                    <td>{order.quantity}</td>
 
-        <thead>
+                    <td>₹{order.total}</td>
 
-          <tr>
+                    <td>
+                      ✅ {order.status}
+                    </td>
 
-            <th>ID</th>
+                  </tr>
 
-            <th>Product</th>
-
-            <th>Category</th>
-
-            <th>Quantity</th>
-
-            <th>Total Price</th>
-
-            <th>Status</th>
-
-
-          </tr>
-
-
-        </thead>
-
-
-
-
-
-        <tbody>
-
-
-        {
-
-        orders.map(order=>(
-
-
-          <tr key={order.id}>
-
-
-            <td>{order.id}</td>
-
-
-            <td>{order.name}</td>
-
-
-            <td>{order.category}</td>
-
-
-            <td>{order.quantity}</td>
-
-
-            <td>₹{order.total}</td>
-
-
-            <td>
-
-              ✅ {order.status}
-
-            </td>
-
-
-
-          </tr>
-
-
-        ))
-
-        }
-
-
-        </tbody>
-
-
-
-      </table>
-
-
-      )
-
-
-      }
-
-
-
-    </div>
-
-
-  );
-
-}
-
+                ))
+              }
+            </tbody>
+         </table> )
+      }  
+      </div>
+  );}
 
 export default Orders;

@@ -17,17 +17,22 @@ function Register() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if(formData.password !== formData.confirmPassword){
-      alert("Passwords do not match!");
-      return;
-    }
-    console.log("Register Data:", formData);
-    alert("Registration Successful!");
-    navigate("/login"); 
-  };
+  e.preventDefault();
 
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify(formData)
+  );
+
+  alert("Registration Successful!");
+
+  navigate("/login");
+};
   return (
     <div className="login-container">
       <div className="login-box">
