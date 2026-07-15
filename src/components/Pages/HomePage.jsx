@@ -1,15 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import imsImage from "../../assets/ims.jpeg";
 import "./HomePage.css";
-
-
 function HomePage() {
-
-  const navigate = useNavigate();
-
-
-  return (
-
+const navigate = useNavigate();
+return (
     <div
       className="home-page"
       style={{
@@ -19,37 +13,20 @@ function HomePage() {
 
       <div className="home-content">
 
-        <h1>
-          📦 Smart Inventory Management System
-        </h1>
-
-
-        <h3>
-          Manage Your Business Inventory Easily
-        </h3>
-
-
+        <h1>📦 Smart Inventory Management System</h1>
+        <h3>Manage Your Business Inventory Easily</h3>
         <p>
           Track products, control stock, manage orders,
           handle suppliers and generate reports
           from one powerful platform.
         </p>
-
-
-        <button
+      <button
           onClick={() => navigate("/login")}
         >
           🔐 Login to Continue
         </button>
-
-
       </div>
-
-    </div>
-
-  );
-
+      </div>
+      );
 }
-
-
 export default HomePage;

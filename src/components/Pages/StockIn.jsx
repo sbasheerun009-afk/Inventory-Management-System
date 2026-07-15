@@ -51,12 +51,11 @@ function StockIn({ products, setProducts }) {
                 <td>₹{item.price}</td>
                 <td>{item.quantity}</td>
                 <td>
-                  <button
-                    className="btn-add"
-                    onClick={() => stockInProduct(item.id)}
-                  >
-                    + Add Stock
-                  </button>
+        <button
+            className="btn-add"
+            onClick={() => stockInProduct(item.id)}
+        >  + Add Stock
+        </button>
                 </td>
               </tr>
             ))

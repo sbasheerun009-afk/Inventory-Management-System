@@ -65,24 +65,22 @@ function Dashboard({
       products.map((item) => {
         if (item.id === id) {
           if (item.quantity > 0) {
-            return {
-              ...item,
+            return {...item,
               quantity: item.quantity - 1,
             };
           } else {
             alert("Stock is already zero");
-          }
-        }
+          }}
         return item;
       })
-    );
-  };
+    );};
 
   const orderProduct = (item) => {
     if (item.quantity === 0) {
       alert("❌ Product Out Of Stock");
       return;
     }
+    //const oreder = { id: date.now(),}
 
     const newOrder = {
       id: Date.now(),
@@ -108,46 +106,42 @@ return (
 
     <div className="dashboard-cards">
 
-      <div className="card blue">
-        <h3>📦 Total Products</h3>
-        <h1>{stats.totalProducts}</h1>
-      </div>
+<div className="card blue">
+      <h3>📦 Total Products</h3>
+      <h1>{stats.totalProducts}</h1>
+  </div>
 
-      <div className="card green">
-        <h3>📊 Total Stock</h3>
-        <h1>{stats.totalStock}</h1>
-      </div>
+<div className="card green">
+    <h3>📊 Total Stock</h3>
+    <h1>{stats.totalStock}</h1>
+</div>
 
-      <div className="card orange">
-        <h3>⚠️ Low Stock</h3>
-        <h1>{stats.lowStock}</h1>
-      </div>
+<div className="card orange">
+    <h3>⚠️ Low Stock</h3>
+    <h1>{stats.lowStock}</h1>
+</div>
 
-      <div className="card red">
-        <h3>❌ Out Of Stock</h3>
-        <h1>{stats.outOfStock}</h1>
-      </div>
+<div className="card red">
+    <h3>❌ Out Of Stock</h3>
+    <h1>{stats.outOfStock}</h1>
+  </div>
 
-      <div className="card purple">
-        <h3>🛒 Orders</h3>
-        <h1>{stats.totalOrders}</h1>
-      </div>
+<div className="card purple">
+  <h3>🛒 Orders</h3>
+  <h1>{stats.totalOrders}</h1>
+</div>
+<div className="card dark">
+    <h3>💰 Stock Value</h3>
+    <h1>₹{stats.stockValue}</h1>
+</div>
+</div>
+<div className="recent-products">
+     <h2>🛍️ Product Management</h2>
 
-      <div className="card dark">
-        <h3>💰 Stock Value</h3>
-        <h1>₹{stats.stockValue}</h1>
-      </div>
+<table>
 
-    </div>
-
-    <div className="recent-products">
-
-      <h2>🛍️ Product Management</h2>
-
-      <table>
-
-        <thead>
-          <tr>
+    <thead>
+        <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Category</th>
@@ -155,43 +149,40 @@ return (
             <th>Quantity</th>
             <th>Status</th>
             <th>Action</th>
-          </tr>
-        </thead>
+        </tr>
+    </thead>
 
-        <tbody>
+  <tbody>
 
-          {products.map((item) => (
-            <tr key={item.id}>
+        {products.map((item) => (
+        <tr key={item.id}>
 
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>₹{item.price}</td>
-              <td>{item.quantity}</td>
-
-              <td>
-                {item.quantity === 0
+        <td>{item.id}</td>
+        <td>{item.name}</td>
+        <td>{item.category}</td>
+        <td>₹{item.price}</td>
+        <td>{item.quantity}</td>
+        <td>{item.quantity === 0
                   ? "❌ Out Stock"
                   : item.quantity <= 5
                   ? "⚠️ Low Stock"
                   : "✅ In Stock"}
-              </td>
+        </td>
 
-              <td>
+        <td>
+          <button
+              className="add-btn"
+              onClick={() => addStock(item.id)}
+          >
+              ➕ Add
+          </button>
 
-                <button
-                  className="add-btn"
-                  onClick={() => addStock(item.id)}
-                >
-                  ➕ Add
-                </button>
-
-                <button
-                  className="remove-btn"
-                  onClick={() => removeStock(item.id)}
-                >
-                  ➖ Remove
-                </button>
+          <button
+              className="remove-btn"
+              onClick={() => removeStock(item.id)}
+          >
+              ➖ Remove
+          </button>
 
                 <Link to={`/products/${item.id}`}>
                   <button className="view-btn">
@@ -199,18 +190,14 @@ return (
                   </button>
                 </Link>
 
-                <button
-                  className="order-btn"
-                  disabled={item.quantity === 0}
-                  onClick={() => orderProduct(item)}
-                >
-                  🛒 Order
-                </button>
-
-              </td>
-
-            </tr>
-          ))}
+        <button
+            className="order-btn"
+            disabled={item.quantity === 0}
+            onClick={() => orderProduct(item)}
+            >🛒 Order
+        </button>
+        </td>
+        </tr>))}
 
         </tbody>
 

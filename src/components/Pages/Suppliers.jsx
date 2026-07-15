@@ -113,138 +113,62 @@ function Suppliers() {
   return (
 
     <div className="suppliers">
-
-
       <h2>🚚 Suppliers</h2>
-
-
       <div className="top-bar">
-
-
-        <button
+    <button
           className="add-btn"
           onClick={addSupplier}
         >
           ➕ Add Supplier
         </button>
-
-
-
         <input
-
-          type="text"
-
-          placeholder="🔍 Search Supplier..."
-
-          className="search"
-
-          value={search}
-
-          onChange={(e)=>setSearch(e.target.value)}
-
+        type="text"
+        placeholder="🔍 Search Supplier..."
+        className="search"
+        value={search}
+        onChange={(e)=>setSearch(e.target.value)}
         />
-
-
-      </div>
-
-
-
-      <table>
-
-
-        <thead>
-
-          <tr>
-
-            <th>ID</th>
-            <th>Supplier Name</th>
-            <th>Contact</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Action</th>
-
-          </tr>
-
-        </thead>
-
-
-
-        <tbody>
-
-
-        {
-          filteredSuppliers.length > 0 ? (
+    </div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Supplier Name</th>
+      <th>Contact</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th>Action</th>
+    </tr>
+</thead>
+  <tbody>{ filteredSuppliers.length > 0 ? (
 
             filteredSuppliers.map((supplier)=>(
-
-              <tr key={supplier.id}>
-
-                <td>{supplier.id}</td>
-
-                <td>{supplier.name}</td>
-
-                <td>{supplier.contact}</td>
-
-                <td>{supplier.email}</td>
-
-                <td>{supplier.address}</td>
-
-
-                <td>
-
-                  <button
-
-                    className="delete-btn"
-
-                    onClick={()=>deleteSupplier(supplier.id)}
-
-                  >
-
-                    🗑 Delete
-
-                  </button>
+        <tr key={supplier.id}>
+            <td>{supplier.id}</td>
+            <td>{supplier.name}</td>
+            <td>{supplier.contact}</td>
+            <td>{supplier.email}</td>
+            <td>{supplier.address}</td>
+        <td>
+    <button className="delete-btn"
+        onClick={()=>deleteSupplier(supplier.id)}
+        > 🗑 Delete
+    </button>
+      </td>
+        </tr>
 
 
-                </td>
+ ))
+     ):( <tr>
 
-
-              </tr>
-
-
-            ))
-
-          )
-
-          :
-
-          (
-
-            <tr>
-
-              <td colSpan="6">
-
-                No Suppliers Available
-
-              </td>
-
-            </tr>
-
-          )
-
-        }
-
-
-        </tbody>
-
-
+    <td colSpan="6">
+      No Suppliers Available
+    </td>
+    </tr>
+          )}
+      </tbody>
       </table>
-
-
-    </div>
-
-  );
-
+      </div>
+);
 }
-
-
 export default Suppliers;

@@ -9,32 +9,17 @@ function Layout({ setIsLoggedIn }) {
 
   return (
     <div className="layout">
-
       <NavBar />
-
-
-      <div className="layout-body">
-
-        <Sidebar 
+<div className="layout-body">
+      <Sidebar 
           setIsLoggedIn={setIsLoggedIn}
-        />
-
-
-        <main className="main-content">
-
-          <Outlet />
-
-        </main>
-
-      </div>
-      
-
-
+  />
+<main className="main-content">
+  <Outlet />
+</main>
+   </div>
       <Footer />
-
-    </div>
+      </div>
   );
 }
-
-
 export default Layout;

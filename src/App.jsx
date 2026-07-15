@@ -102,128 +102,69 @@ useEffect(()=>{
 return (
   <Routes>
 
-    <Route
-      path="/"
-      element={<HomePage />}
+    <Route path="/" element={<HomePage />} />
+    <Route path="/home"element={<HomePage />}/>
+    <Route path="/login"element={
+  <Login
+    setIsLoggedIn={setIsLoggedIn}
     />
+}
+/>
+   <Route path="/register" element={<Register /> }/>
+   <Route element={isLoggedIn ? (
+   <Layout setIsLoggedIn={setIsLoggedIn} />
+    ) : (
+   <Navigate to="/login" replace />
+        )}>
 
-    <Route
-      path="/home"
-      element={<HomePage />}
-    />
-
-    <Route
-      path="/login"
-      element={
-        <Login
-          setIsLoggedIn={setIsLoggedIn}
-        />
-      }
-    />
-
-    <Route
-      path="/register"
-      element={<Register />}
-    />
-
-    <Route
-      element={
-        isLoggedIn ? (
-          <Layout setIsLoggedIn={setIsLoggedIn} />
-        ) : (
-          <Navigate to="/login" replace />
-        )
-      }
-    >
-
-      <Route
-        path="/dashboard"
-        element={
-          <Dashboard
-            products={products}
-            setProducts={setProducts}
-            orders={orders}
-            setOrders={setOrders}
-          />
+    <Route path="/dashboard"element={
+    <Dashboard
+        products={products}
+        setProducts={setProducts}
+        orders={orders}
+        setOrders={setOrders}/>}/>
+    <Route path="/products"element={
+    <Products
+          products={products}
+          setProducts={setProducts}
+          orders={orders}
+          setOrders={setOrders}/>
+  }/>
+    <Route path="/products/:id" element={
+    <ProductDetails
+    products={products}/>
         }
       />
-
-      <Route
-        path="/products"
-        element={
-          <Products
-            products={products}
-            setProducts={setProducts}
-            orders={orders}
-            setOrders={setOrders}
-          />
-        }
-      />
-      <Route
-        path="/products/:id"
-        element={
-          <ProductDetails
-            products={products}
-          />
-        }
-      />
-
-      <Route
-        path="/categories"
-        element={
-          <Categories
-            categories={categories}
-            setCategories={setCategories}
-          />
-        }
-      />
-
-      <Route
-        path="/stockin"
-        element={
-          <StockIn
+     <Route path="/categories"
+        element={<Categories
+        categories={categories}
+        setCategories={setCategories}/>
+}/>
+  <Route path="/stockin"element={<StockIn
             products={products}
             setProducts={setProducts}
           />
-        }
-      />
+}/>
 
-      <Route
-        path="/stockout"
-        element={
-          <StockOut
-            products={products}
-            setProducts={setProducts}
-          />
-        }
-      />
-
-      <Route
+      <Route path="/stockout"element={
+        <StockOut products={products}
+        setProducts={setProducts}/>
+}/>
+     <Route
         path="/suppliers"
         element={<Suppliers />}
       />
 
-      <Route
-        path="/orders"
-        element={
-          <Orders
-            orders={orders}
-            setOrders={setOrders}
-            products={products}
-            setProducts={setProducts}
-          />
-        }
-      />
+  <Route
+    path="/orders"
+    element={<Orders orders={orders}
+    setOrders={setOrders}
+    products={products}
+    setProducts={setProducts}/>}/>
 
-      <Route
-        path="/reports"
-        element={
-          <Reports
-            products={products}
+      <Route path="/reports"element={<Reports products={products}
             orders={orders}
-          />
-        }
-      />
+/>}/>
 
     </Route>
 <Route
