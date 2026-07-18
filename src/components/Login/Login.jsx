@@ -8,8 +8,8 @@ const [password, setPassword] = useState("");
 const [showPassword, setShowPassword] = useState(false);
 const handleLogin = (e) => {e.preventDefault();
 if(
-  email === "admin@gmail.com" && 
-  password === "12345")
+  email === "basheerun@gmail.com" && 
+  password === "Basheerun@123")
   {
 
   localStorage.setItem("login","true");

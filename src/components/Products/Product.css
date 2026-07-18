@@ -208,3 +208,34 @@ tbody td[colspan="7"] {
   color: green;
   font-weight: bold;
 }
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* horizontal scroll */
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  min-width: 900px; /* table chinnaga kakunda undadaniki */
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  white-space: nowrap; /* text break avvakunda */
+}
+
+th {
+  background: #007bff;
+  color: white;
+  position: sticky;
+  top: 0; /* scroll chesina header kanipinchadaniki */
+}
+
+.highlight-row {
+  background-color: #fff3cd !important; /* update ayyaka yellow */
+  transition: background-color 1s ease;
+}

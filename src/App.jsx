@@ -123,23 +123,40 @@ return (
         setProducts={setProducts}
         orders={orders}
         setOrders={setOrders}/>}/>
-    <Route path="/products"element={
+    {/* <Route path="/products"element={
     <Products
           products={products}
           setProducts={setProducts}
           orders={orders}
           setOrders={setOrders}/>
-  }/>
+  }/> */}
+<Route
+  path="/products"
+  element={
+    <Products
+      products={products}
+      setProducts={setProducts}
+      categories={categories}
+    />
+  }
+/>
     <Route path="/products/:id" element={
     <ProductDetails
     products={products}/>
         }
       />
-     <Route path="/categories"
-        element={<Categories
-        categories={categories}
-        setCategories={setCategories}/>
-}/>
+  <Route
+  path="/categories"
+  element={
+    <Categories
+      categories={categories}
+      setCategories={setCategories}
+      products={products}
+      setProducts={setProducts}
+    />
+  }
+/>
+
   <Route path="/stockin"element={<StockIn
             products={products}
             setProducts={setProducts}

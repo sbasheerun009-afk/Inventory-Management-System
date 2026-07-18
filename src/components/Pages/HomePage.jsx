@@ -20,7 +20,7 @@ return (
           handle suppliers and generate reports
           from one powerful platform.
         </p>
-      <button
+      <button className="Login-button"
           onClick={() => navigate("/login")}
         >
           🔐 Login to Continue

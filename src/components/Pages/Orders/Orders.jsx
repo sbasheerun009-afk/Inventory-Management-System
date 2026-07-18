@@ -1,117 +1,191 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Orders.css";
 
-function Orders({ orders, setOrders, products, setProducts }) {
-
+function Orders({
+  orders,
+  setOrders,
+  products,
+  setProducts,
+}) {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState("");
+
+  useEffect(() => {
+    document.title = "Orders | Inventory";
+  }, []);
+
   const placeOrder = () => {
     if (!selectedProduct || !quantity) {
       alert("Please select product and quantity");
       return;
     }
-const product = products.find(
-    (item) => item.id === Number(selectedProduct)
-);
-if (!product) {
-    alert("Product not found");
-    return;
-}
-if (product.quantity < Number(quantity)) {
-    alert("❌ Not enough stock");
-    return;
-}
-const newOrder = {
-      id: Date.now(),
+
+    const qty = Number(quantity);
+
+    if (qty <= 0) {
+      alert("Enter valid quantity");
+      return;
+    }
+
+    const product = products.find(
+      (item) => item.id === Number(selectedProduct)
+    );
+
+    if (!product) {
+      alert("Product not found");
+      return;
+    }
+
+    if (product.quantity < qty) {
+      alert("Not enough stock");
+      return;
+    }
+
+    const newOrder = {
+      id: Date.now(), // Internal only
+      date: new Date().toLocaleString(),
       name: product.name,
       category: product.category,
       price: product.price,
-      quantity: Number(quantity),
-      total: product.price * Number(quantity),
-      status: "Completed"
+      quantity: qty,
+      total: product.price * qty,
+      status: "Completed",
     };
-setOrders([...orders,newOrder])
-const updatedProducts = products.map((item) => {
-if (item.id === product.id) {
-  return {...item,
-    quantity: item.quantity - Number(quantity)
-        };
-  }
-return item;
-});
-setProducts(updatedProducts);
-setSelectedProduct("");
-setQuantity("");
-alert("✅ Order Placed Successfully");
- };
-return (
-<div className="orders">
-  <h2>🛒 Orders Management</h2>
-  <div className="order-form">
-    <select
-        value={selectedProduct}
-        onChange={(e)=>setSelectedProduct(e.target.value)}
-    >
 
-    <option value="">
-      Select Product
-    </option>
-{
-      products.map((item)=>(
-        <option
-          key={item.id}
-          value={item.id}
-        >
-      {item.name}
+    setOrders([newOrder, ...orders]);
 
-      </option>
-      ))}
-</select>
-    <input
-    type="number"
-    placeholder="Enter Quantity"
-    value={quantity}
-    onChange={(e)=>setQuantity(e.target.value)}
-    />
-<button onClick={placeOrder}>
-  🛒 Place Order
-</button>
-   </div> 
-   <h3>📋 Order History </h3>
-{ orders.length === 0 ? (
-    <p className="empty">
-        No Orders Available
-    </p>
-) : (
-   <table>
-    <thead>
-      <tr>
+    setProducts(
+      products.map((item) =>
+        item.id === product.id
+          ? {
+              ...item,
+              quantity: item.quantity - qty,
+            }
+          : item
+      )
+    );
 
-        <th>ID</th>
-        <th>Product</th>
-        <th>Category</th>
-        <th>Quantity</th>
-        <th>Total Price</th>
-        <th>Status</th>
-      </tr>
-   </thead>
-   <tbody>
-    { orders.map((order)=>(
-      <tr key={order.id}>
-        <td>{order.id}</td>
-        <td>{order.name}</td>
-        <td>{order.category}</td>
-        <td>{order.quantity}</td>
-        <td>₹{order.total}</td>
-      <td> ✅ {order.status} </td>
+    setSelectedProduct("");
+    setQuantity("");
 
-      </tr> 
-    ))
+    alert("Order Placed Successfully");
+  };
+
+  const deleteOrder = (id) => {
+    if (window.confirm("Delete this order?")) {
+      setOrders(
+        orders.filter((item) => item.id !== id)
+      );
     }
-    </tbody>
-    </table> )
-      }  
-      </div>
-  );}
+  };
 
+  const totalRevenue = orders.reduce(
+    (sum, item) => sum + item.total,
+    0
+  );
+return (
+  <div className="orders">
+    <h2>🛒 Orders Management</h2>
+
+    <div className="order-form">
+      <h3>➕ Place New Order</h3>
+
+      <select
+        value={selectedProduct}
+        onChange={(e) => setSelectedProduct(e.target.value)}
+      >
+        <option value="">Select Product</option>
+
+        {products.map((item) => (
+          <option
+            key={item.id}
+            value={item.id}
+            disabled={item.quantity === 0}
+          >
+            {item.name} | Stock: {item.quantity} | ₹{item.price}
+          </option>
+        ))}
+      </select>
+
+      <input
+        type="number"
+        min="1"
+        placeholder="Enter Quantity"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+      />
+
+      <button
+        className="place-btn"
+        onClick={placeOrder}
+      >
+        🛒 Place Order
+      </button>
+    </div>
+
+    <div className="order-summary">
+      <div className="card">
+        <p>Total Orders</p>
+        <h4>{orders.length}</h4>
+      </div>
+
+      <div className="card">
+        <p>Total Revenue</p>
+        <h4>₹{totalRevenue}</h4>
+      </div>
+    </div>
+
+    <h3>📋 Order History</h3>
+
+    {orders.length === 0 ? (
+      <p className="empty">No Orders Available</p>
+    ) : (
+      <div className="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {orders.map((order, index) => (
+              <tr key={order.id}>
+                <td>{index + 1}</td>
+                <td>{order.name}</td>
+                <td>{order.category}</td>
+                <td>{order.quantity}</td>
+                <td>₹{order.price}</td>
+                <td>₹{order.total}</td>
+                <td>
+                  <span className="status">
+                    {order.status}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteOrder(order.id)}
+                  >
+                    🗑 Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
+    )}
+  </div>
+);
+}
 export default Orders;
