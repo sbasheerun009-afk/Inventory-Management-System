@@ -83,6 +83,22 @@ function Orders({
     (sum, item) => sum + item.total,
     0
   );
+
+  const fetchOrders = async () => {
+  try {
+
+    const response = await api.get("/orders");
+    console.log(response.data);
+    setOrders(response.data.orders);
+
+  } catch(error) {
+
+    console.log(error);
+
+  }
+};
+
+
 return (
   <div className="orders">
     <h2>🛒 Orders Management</h2>

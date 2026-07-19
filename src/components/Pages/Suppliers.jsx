@@ -107,8 +107,16 @@ function Suppliers() {
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+   const fetchSuppliers = async () => {
+  try {
+    const response = await api.get("/suppliers");
 
+    console.log(response.data);
 
+  } catch(error) {
+    console.log(error);
+  }
+};
 
   return (
 
