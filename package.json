@@ -1,14 +1,7 @@
-{
-<<<<<<< HEAD
-  "name": "inventory-management-system",
-  "private": true,
-  "version": "0.0.0",
-=======
-  "name": "iventory-management-system",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
->>>>>>> 4a16dea (connecting FE-BE -1)
+{  
+  "name": "vite-project",
+  "private" : true,
+  "version":"0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
