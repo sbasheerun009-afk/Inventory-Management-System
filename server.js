@@ -17,12 +17,12 @@ app.use(express.json());
 app.use(cors());
 
 connectDB();
-app.use("/api/products", productRoutes);
-app.use("/api/suppliers",supplierRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/stockin", stockinRoutes);
-app.use("/api/stockout", stockoutRoutes);
+app.use("/products", productRoutes);
+app.use("/suppliers",supplierRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/orders", orderRoutes);
+app.use("/stockin", stockinRoutes);
+app.use("/stockout", stockoutRoutes);
 
 
 app.listen(5000, () => {
