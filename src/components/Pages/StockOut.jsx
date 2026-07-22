@@ -1,235 +1,346 @@
-// import "../Products/Product.css";
-
-// function StockOut({ products, setProducts }) {
-
-//   const stockOutProduct = (id) => {
-//     const selectedProduct = products.find(
-//       (product) => product.id === id
-//     );
-
-//     if (selectedProduct.quantity === 0) {
-//       alert("❌ Stock is not available!");
-//       return;
-//     }
-
-//     const updatedProducts = products.map((product) => {
-//       if (product.id === id) {
-//         return {
-//           ...product,
-//           quantity: product.quantity - 1,
-//         };
-//       }
-
-//       return product;
-//     });
-
-//     setProducts(updatedProducts);
-
-//     alert("✅ Stock issued successfully!");
-//   };
-
-
-//   return (
-//     <div className="products">
-
-//       <h2>📤 Stock Out</h2>
-
-//       <div className="top-bar">
-//         <input
-//           type="text"
-//           placeholder="🔍 Search Product..."
-//           className="search"
-//         />
-//       </div>
-
-
-//       <table>
-
-//         <thead>
-//           <tr>
-//             <th>ID</th>
-//             <th>Product Name</th>
-//             <th>Category</th>
-//             <th>Price</th>
-//             <th>Current Stock</th>
-//             <th>Status</th>
-//             <th>Action</th>
-//           </tr>
-//         </thead>
-
-
-//         <tbody>
-
-//           {products.length > 0 ? (
-
-//             products.map((item) => (
-
-//               <tr key={item.id}>
-
-//                 <td>{item.id}</td>
-
-//                 <td>{item.name}</td>
-
-//                 <td>{item.category}</td>
-
-//                 <td>₹{item.price}</td>
-
-//                 <td>{item.quantity}</td>
-
-
-//                 <td>
-//                   {
-//                     item.quantity === 0 ? (
-//                       <span className="out-stock">
-//                         Out of Stock
-//                       </span>
-//                     ) : item.quantity < 5 ? (
-//                       <span className="low-stock">
-//                         Low Stock
-//                       </span>
-//                     ) : (
-//                       <span className="in-stock">
-//                         In Stock
-//                       </span>
-//                     )
-//                   }
-//                 </td>
-
-
-//                 <td>
-
-//                   <button
-//                     className="btn-remove"
-//                     disabled={item.quantity === 0}
-//                     onClick={() => stockOutProduct(item.id)}
-//                   >
-//                     - Issue Stock
-//                   </button>
-
-//                 </td>
-
-//               </tr>
-
-//             ))
-
-//           ) : (
-
-//             <tr>
-//               <td colSpan="7">
-//                 No Products Available
-//               </td>
-//             </tr>
-
-//           )}
-
-//         </tbody>
-
-//       </table>
-
-//     </div>
-//   );
-// }
-
-// export default StockOut;
 import { useState } from "react";
-import "../Products/Product.css";
+import api from "../../api/api";
+import "./StockOut.css";
 
-function StockOut({ products, setProducts }) {
-  const [search, setSearch] = useState("");
+function StockOut({ products = [], setProducts }) {
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const stockOutProduct = (id) => {
-    const product = products.find((item) => item.id === id);
+  const handleStockOut = async (e) => {
+    e.preventDefault();
 
-    if (product.quantity <= 0) {
-      alert("Stock is not available");
+    if (!productName || !quantity || !customerName) {
+      alert("Please fill all details");
       return;
     }
 
-    setProducts(
-      products.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: item.quantity - 1,
-            }
-          : item
-      )
+    const stockQuantity = Number(quantity);
+
+    if (stockQuantity <= 0) {
+      alert("Quantity must be greater than 0");
+      return;
+    }
+
+    // Find selected product
+    const selectedProduct = products.find(
+      (product) =>
+        (product.productName ||
+          product.productname) === productName
     );
 
-    alert("Stock removed successfully");
+    if (!selectedProduct) {
+      alert("Product not found");
+      return;
+    }
+
+    const productId =
+      selectedProduct._id ||
+      selectedProduct.id;
+
+    const currentQuantity =
+      Number(selectedProduct.quantity) || 0;
+
+    // Check available stock
+    if (stockQuantity > currentQuantity) {
+      alert(
+        `Only ${currentQuantity} items are available in stock`
+      );
+      return;
+    }
+
+    const updatedQuantity =
+      currentQuantity - stockQuantity;
+
+    try {
+      setLoading(true);
+
+      // 1. Save Stock Out record in MongoDB
+      const stockData = {
+        productname: productName,
+        quantity: stockQuantity,
+        customername: customerName,
+      };
+
+      await api.post(
+        "/stockout",
+        stockData
+      );
+
+      // 2. Update Product Quantity in MongoDB
+      const productData = {
+        productName:
+          selectedProduct.productName ||
+          selectedProduct.productname,
+
+        category:
+          selectedProduct.category,
+
+        price:
+          Number(selectedProduct.price) || 0,
+
+        quantity:
+          updatedQuantity,
+
+        supplier:
+          selectedProduct.supplier || "",
+      };
+
+      const response = await api.put(
+        `/products/${productId}`,
+        productData
+      );
+
+      // 3. Update Product in Frontend
+      const updatedProduct =
+        response.data.product ||
+        productData;
+
+      setProducts(
+        (previousProducts) =>
+          previousProducts.map(
+            (product) => {
+              const id =
+                product._id ||
+                product.id;
+
+              if (id === productId) {
+                return {
+                  ...product,
+                  ...updatedProduct,
+                  quantity:
+                    updatedQuantity,
+                };
+              }
+
+              return product;
+            }
+          )
+      );
+
+      alert(
+        "Stock Out Successfully ✅"
+      );
+
+      // Clear form
+      setProductName("");
+      setQuantity("");
+      setCustomerName("");
+
+    } catch (error) {
+      console.log(
+        "Stock Out Error:",
+        error.response?.data ||
+          error.message
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to remove stock"
+      );
+
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredProducts = products.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
-    <div className="products">
+    <div className="stock-out">
+
       <h2>📤 Stock Out</h2>
 
-      <div className="top-bar">
-        <input
-          type="text"
-          placeholder="🔍 Search Product..."
-          className="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="stock-out-form">
+
+        <h3>Remove Stock</h3>
+
+        <form
+          onSubmit={handleStockOut}
+        >
+
+          <label>
+            Product Name
+          </label>
+
+          <select
+            value={productName}
+            onChange={(e) =>
+              setProductName(
+                e.target.value
+              )
+            }
+            disabled={loading}
+          >
+
+            <option value="">
+              Select Product
+            </option>
+
+            {products.map(
+              (product, index) => {
+
+                const name =
+                  product.productName ||
+                  product.productname ||
+                  "";
+
+                return (
+                  <option
+                    key={
+                      product._id ||
+                      product.id ||
+                      index
+                    }
+                    value={name}
+                  >
+                    {name ||
+                      "Unnamed Product"}{" "}
+                    - Stock:{" "}
+                    {Number(
+                      product.quantity || 0
+                    )}
+                  </option>
+                );
+              }
+            )}
+
+          </select>
+
+          <label>
+            Quantity
+          </label>
+
+          <input
+            type="number"
+            placeholder="Enter Quantity"
+            value={quantity}
+            min="1"
+            onChange={(e) =>
+              setQuantity(
+                e.target.value
+              )
+            }
+            disabled={loading}
+          />
+
+          <label>
+            Customer Name
+          </label>
+
+          <input
+            type="text"
+            placeholder="Enter Customer Name"
+            value={customerName}
+            onChange={(e) =>
+              setCustomerName(
+                e.target.value
+              )
+            }
+            disabled={loading}
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+          >
+            {loading
+              ? "Removing Stock..."
+              : "📤 Remove Stock"}
+          </button>
+
+        </form>
+
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Current Stock</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      <div className="stock-table">
 
-        <tbody>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((item, index) => (
-              <tr key={item.id}>
-                <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>₹{item.price}</td>
-                <td>{item.quantity}</td>
+        <h3>
+          Current Stock
+        </h3>
 
-                <td>
-                  {item.quantity === 0 ? (
-                    <span className="out-stock">❌ Out of Stock</span>
-                  ) : item.quantity <= 5 ? (
-                    <span className="low-stock">⚠️ Low Stock</span>
-                  ) : (
-                    <span className="in-stock">✅ In Stock</span>
-                  )}
-                </td>
+        <table>
 
-                <td>
-                  <button
-                    className="btn-remove"
-                    disabled={item.quantity === 0}
-                    onClick={() => stockOutProduct(item.id)}
-                  >
-                    Remove stock
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
+          <thead>
+
             <tr>
-              <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>
-                Stock removed succesfully
-              </td>
+              <th>ID</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Supplier</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+
+          </thead>
+
+          <tbody>
+
+            {products.length > 0 ? (
+
+              products.map(
+                (product, index) => {
+
+                  const name =
+                    product.productName ||
+                    product.productname ||
+                    "Unnamed Product";
+
+                  return (
+
+                    <tr
+                      key={
+                        product._id ||
+                        product.id ||
+                        index
+                      }
+                    >
+
+                      <td>
+                        {index + 1}
+                      </td>
+
+                      <td>
+                        {name}
+                      </td>
+
+                      <td>
+                        {product.category ||
+                          "-"}
+                      </td>
+
+                      <td>
+                        {product.quantity ||
+                          0}
+                      </td>
+
+                      <td>
+                        {product.supplier ||
+                          "-"}
+                      </td>
+
+                    </tr>
+
+                  );
+                }
+              )
+
+            ) : (
+
+              <tr>
+
+                <td colSpan="5">
+                  No Products Available
+                </td>
+
+              </tr>
+
+            )}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
     </div>
   );
 }

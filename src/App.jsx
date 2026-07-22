@@ -22,12 +22,15 @@ import EditProduct from "./components/Products/EditProduct";
 import Category from "./components/Categories/Category";
 import CategoryDetails from "./components/Categories/CategoryDetails";
 import EditCategory from "./components/Categories/EditCategory";
+import SupplierDetails from "./components/Pages/SupplierDetails";
+import EditSupplier from "./components/Pages/EditSuppliers";
 
 import StockIn from "./components/Pages/StockIn";
 import StockOut from "./components/Pages/StockOut";
 import Suppliers from "./components/Pages/Suppliers";
 import Orders from "./components/Pages/Orders/Orders";
 import Reports from "./components/Pages/Reports";
+import AdminProfile from "./components/pages/AdminProfile/AdminProfile";
 
 import api from "./api/api";
 
@@ -191,13 +194,24 @@ function App() {
             <EditProduct />
           }
         />
+        
 
-        <Route
-          path="/categories"
-          element={
-            <Category />
-          }
-        />
+<Route
+  path="/admin-profile"
+  element={<AdminProfile />}
+/>
+
+                <Route
+            path="/categories"
+            element={
+              <Category
+                categories={categories}
+                setCategories={setCategories}
+                products={products}
+                setProducts={setProducts}
+              />
+            }
+          />
 
         <Route
           path="/categories/:id"
@@ -231,22 +245,29 @@ function App() {
               setProducts={setProducts}
             />
           }
-        />
-        <Route
+                />   <Route
           path="/suppliers"
+          element={<Suppliers />}
+        />
+
+        <Route
+          path="/suppliers/:id"
+          element={<SupplierDetails />}
+        />
+
+        <Route
+          path="/suppliers/edit/:id"
+          element={<EditSupplier />}
+        />
+              <Route
+          path="/orders"
           element={
-            <Suppliers />
+            <Orders
+              orders={orders}
+              setOrders={setOrders}
+            />
           }
         />
-      <Route
-  path="/orders"
-  element={
-    <Orders
-      orders={orders}
-      setOrders={setOrders}
-    />
-  }
-/>
 
         <Route
           path="/reports"
