@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Register.css";
 
 function Register() {
@@ -9,30 +10,63 @@ function Register() {
     password: "",
     confirmPassword: ""
   });
+
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
 
-  localStorage.setItem(
-    "user",
-    JSON.stringify(formData)
-  );
+    try {
+      setLoading(true);
 
-  alert("Registration Successful!");
+      const response = await axios.post(
+        "http://localhost:5000/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        }
+      );
 
-  navigate("/login");
-};
+      if (response.data.success) {
+        alert("Registration Successful!");
+
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
+
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Registration Error:", error);
+
+      alert(
+        error.response?.data?.message ||
+        "Registration failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -42,65 +76,73 @@ function Register() {
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Full Name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="name"
-              placeholder="Enter Name" 
+              placeholder="Enter Name"
               value={formData.name}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
 
           <div className="input-group">
             <label>Email</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               name="email"
-              placeholder="Enter Email" 
+              placeholder="Enter Email"
               value={formData.email}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
 
           <div className="input-group">
             <label>Password</label>
-            <input 
-              type={showPassword ? "text" : "password"} 
+            <input
+              type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Enter Password" 
+              placeholder="Enter Password"
               value={formData.password}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
 
           <div className="input-group">
             <label>Confirm Password</label>
-            <input 
-              type={showPassword ? "text" : "password"} 
+            <input
+              type={showPassword ? "text" : "password"}
               name="confirmPassword"
-              placeholder="Re-enter Password" 
+              placeholder="Re-enter Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
 
           <div className="show-pass">
-            <input 
-              type="checkbox" 
-              onChange={() => setShowPassword(!showPassword)} 
-            /> 
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            />
             <label>Show Password</label>
           </div>
 
-          <button type="submit" className="login-btn">Register</button>
+          <button
+            type="submit"
+            className="login-btn"
+            disabled={loading}
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
         </form>
 
         <p className="register-link">
-          Already have an account? <Link to="/login">LogIn</Link>
+          Already have an account?{" "}
+          <Link to="/login">LogIn</Link>
         </p>
       </div>
     </div>

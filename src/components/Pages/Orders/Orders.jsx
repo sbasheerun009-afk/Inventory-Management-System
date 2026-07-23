@@ -16,7 +16,6 @@ function Orders({ orders = [], setOrders }) {
     status: "Pending",
   });
 
-  // Always keep orders as an array
   const safeOrders = Array.isArray(orders) ? orders : [];
   const fetchOrders = async () => {
     try {
@@ -25,25 +24,13 @@ function Orders({ orders = [], setOrders }) {
 
       const response = await api.get("/orders");
 
-      console.log("Orders API Response:", response.data);
+      console.log("Orders Response:", response.data);
 
-      const data = response.data;
+      const orderData = Array.isArray(response.data)
+        ? response.data
+        : response.data?.orders || [];
 
-      let fetchedOrders = [];
-
-      if (Array.isArray(data)) {
-        fetchedOrders = data;
-      } else if (Array.isArray(data?.orders)) {
-        fetchedOrders = data.orders;
-      } else if (Array.isArray(data?.data)) {
-        fetchedOrders = data.data;
-      } else if (Array.isArray(data?.order)) {
-        fetchedOrders = data.order;
-      }
-
-      setOrders(fetchedOrders);
-
-      console.log("Final Orders Array:", fetchedOrders);
+      setOrders(orderData);
     } catch (error) {
       console.log(
         "Fetch Orders Error:",
@@ -54,25 +41,25 @@ function Orders({ orders = [], setOrders }) {
         error.response?.data?.message ||
           "Failed to fetch orders"
       );
-
-      setOrders([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch orders when component loads
+  // Fetch orders when page loads
   useEffect(() => {
     fetchOrders();
   }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setNewOrder((prev) => ({
-      ...prev,
+    setNewOrder((previousOrder) => ({
+      ...previousOrder,
       [name]: value,
     }));
   };
+
   const resetForm = () => {
     setNewOrder({
       ordernumber: "",
@@ -84,27 +71,26 @@ function Orders({ orders = [], setOrders }) {
     });
 
     setShowForm(false);
+    setError("");
   };
+
   const addOrder = async (e) => {
     e.preventDefault();
 
-    const orderNumber = String(
-      newOrder.ordernumber || ""
-    ).trim();
+    const orderNumber =
+      newOrder.ordernumber.trim();
 
-    const customerName = String(
-      newOrder.customername || ""
-    ).trim();
+    const customerName =
+      newOrder.customername.trim();
 
-    const productName = String(
-      newOrder.productname || ""
-    ).trim();
+    const productName =
+      newOrder.productname.trim();
 
-    const quantity = Number(newOrder.quantity);
+    const quantity =
+      Number(newOrder.quantity);
 
-    const totalAmount = Number(
-      newOrder.totalamount
-    );
+    const totalAmount =
+      Number(newOrder.totalamount);
 
     // Validation
     if (
@@ -118,19 +104,13 @@ function Orders({ orders = [], setOrders }) {
       return;
     }
 
-    if (
-      Number.isNaN(quantity) ||
-      quantity <= 0
-    ) {
-      alert("Please enter a valid quantity");
+    if (quantity <= 0) {
+      alert("Quantity must be greater than 0");
       return;
     }
 
-    if (
-      Number.isNaN(totalAmount) ||
-      totalAmount < 0
-    ) {
-      alert("Please enter a valid total amount");
+    if (totalAmount < 0) {
+      alert("Total amount cannot be negative");
       return;
     }
 
@@ -144,41 +124,50 @@ function Orders({ orders = [], setOrders }) {
         productname: productName,
         quantity: quantity,
         totalamount: totalAmount,
-        status: newOrder.status,
+        status: "Pending",
       };
 
       console.log(
-        "Sending Order Data:",
+        "Sending Order:",
         orderData
       );
 
+      // Backend will:
+      // 1. Create Order
+      // 2. Decrease Product Quantity
+      // 3. Create StockOut Record
       const response = await api.post(
         "/orders",
         orderData
       );
 
       console.log(
-        "Add Order Response:",
+        "Order Created:",
         response.data
       );
 
-      // After successful add,
-      // fetch latest orders from backend.
+      // Refresh orders
       await fetchOrders();
 
       resetForm();
 
-      alert("Order added successfully");
+      alert(
+        "Order placed successfully ✅\nStock quantity decreased automatically 📦"
+      );
     } catch (error) {
       console.log(
         "Add Order Error:",
-        error.response?.data || error.message
+        error.response?.data ||
+          error.message
       );
 
-      setError(
+      const message =
         error.response?.data?.message ||
-          "Failed to add order"
-      );
+        "Failed to place order";
+
+      setError(message);
+
+      alert(`❌ ${message}`);
     } finally {
       setLoading(false);
     }
@@ -189,9 +178,10 @@ function Orders({ orders = [], setOrders }) {
       return;
     }
 
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this order?"
-    );
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this order?"
+      );
 
     if (!confirmDelete) {
       return;
@@ -199,95 +189,31 @@ function Orders({ orders = [], setOrders }) {
 
     try {
       setLoading(true);
-      setError("");
 
-      await api.delete(`/orders/${id}`);
+      await api.delete(
+        `/orders/${id}`
+      );
 
-      // Remove deleted order from frontend state
-      setOrders((prevOrders) => {
-        const safePrevOrders = Array.isArray(
-          prevOrders
+      setOrders((previousOrders) =>
+        previousOrders.filter(
+          (order) =>
+            order._id !== id
         )
-          ? prevOrders
-          : [];
+      );
 
-        return safePrevOrders.filter(
-          (item) => item?._id !== id
-        );
-      });
-
-      alert("Order deleted successfully");
+      alert(
+        "Order deleted successfully"
+      );
     } catch (error) {
       console.log(
         "Delete Order Error:",
-        error.response?.data || error.message
+        error.response?.data ||
+          error.message
       );
 
-      setError(
+      alert(
         error.response?.data?.message ||
           "Failed to delete order"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-  const updateStatus = async (
-    id,
-    status
-  ) => {
-    if (!id) {
-      alert("Order ID not found");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await api.put(
-        `/orders/${id}`,
-        {
-          status,
-        }
-      );
-
-      console.log(
-        "Update Order Response:",
-        response.data
-      );
-
-      // Get updated order from backend
-      if (response.data?.order) {
-        const updatedOrder =
-          response.data.order;
-
-        setOrders((prevOrders) => {
-          const safePrevOrders =
-            Array.isArray(prevOrders)
-              ? prevOrders
-              : [];
-
-          return safePrevOrders.map(
-            (item) =>
-              item?._id === id
-                ? updatedOrder
-                : item
-          );
-        });
-      } else {
-        // If backend doesn't return updated order,
-        // fetch all orders again.
-        await fetchOrders();
-      }
-    } catch (error) {
-      console.log(
-        "Update Order Error:",
-        error.response?.data || error.message
-      );
-
-      setError(
-        error.response?.data?.message ||
-          "Failed to update order"
       );
     } finally {
       setLoading(false);
@@ -296,6 +222,7 @@ function Orders({ orders = [], setOrders }) {
 
   return (
     <div className="orders">
+
       <h2>📦 Orders</h2>
 
       {/* ADD ORDER BUTTON */}
@@ -309,116 +236,140 @@ function Orders({ orders = [], setOrders }) {
         ➕ Add Order
       </button>
 
-      {/* ERROR */}
+      {/* ERROR MESSAGE */}
       {error && (
-        <p
-          style={{
-            color: "red",
-            textAlign: "center",
-          }}
-        >
+        <p className="error-message">
           ❌ {error}
         </p>
       )}
+
+      {/* ORDER FORM */}
       {showForm && (
         <div className="order-form">
-          <h3>Add New Order</h3>
 
-          <input
-            type="text"
-            name="ordernumber"
-            placeholder="Order Number"
-            value={
-              newOrder.ordernumber
-            }
-            onChange={handleChange}
-          />
+          <h3>
+            ➕ Add New Order
+          </h3>
 
-          <input
-            type="text"
-            name="customername"
-            placeholder="Customer Name"
-            value={
-              newOrder.customername
-            }
-            onChange={handleChange}
-          />
+          <form onSubmit={addOrder}>
 
-          <input
-            type="text"
-            name="productname"
-            placeholder="Product Name"
-            value={
-              newOrder.productname
-            }
-            onChange={handleChange}
-          />
+            <input
+              type="text"
+              name="ordernumber"
+              placeholder="Order Number"
+              value={
+                newOrder.ordernumber
+              }
+              onChange={
+                handleChange
+              }
+            />
 
-          <input
-            type="number"
-            min="1"
-            name="quantity"
-            placeholder="Quantity"
-            value={
-              newOrder.quantity
-            }
-            onChange={handleChange}
-          />
+            <input
+              type="text"
+              name="customername"
+              placeholder="Customer Name"
+              value={
+                newOrder.customername
+              }
+              onChange={
+                handleChange
+              }
+            />
 
-          <input
-            type="number"
-            min="0"
-            name="totalamount"
-            placeholder="Total Amount"
-            value={
-              newOrder.totalamount
-            }
-            onChange={handleChange}
-          />
+            <input
+              type="text"
+              name="productname"
+              placeholder="Product Name"
+              value={
+                newOrder.productname
+              }
+              onChange={
+                handleChange
+              }
+            />
 
-          <select
-            name="status"
-            value={newOrder.status}
-            onChange={handleChange}
-          >
-            <option value="Pending">
-              Pending
-            </option>
+            <input
+              type="number"
+              name="quantity"
+              min="1"
+              placeholder="Quantity"
+              value={
+                newOrder.quantity
+              }
+              onChange={
+                handleChange
+              }
+            />
 
-            <option value="Processing">
-              Processing
-            </option>
+            <input
+              type="number"
+              name="totalamount"
+              min="0"
+              placeholder="Total Amount"
+              value={
+                newOrder.totalamount
+              }
+              onChange={
+                handleChange
+              }
+            />
 
-            <option value="Delivered">
-              Delivered
-            </option>
+            <select
+              name="status"
+              value={
+                newOrder.status
+              }
+              onChange={
+                handleChange
+              }
+            >
+              <option value="Pending">
+                Pending
+              </option>
 
-            <option value="Cancelled">
-              Cancelled
-            </option>
-          </select>
+              <option value="Processing">
+                Processing
+              </option>
 
-          <button
-            className="save-btn"
-            onClick={addOrder}
-            disabled={loading}
-          >
-            {loading
-              ? "Saving..."
-              : "Save"}
-          </button>
+              <option value="Delivered">
+                Delivered
+              </option>
 
-          <button
-            className="cancel-btn"
-            onClick={resetForm}
-            disabled={loading}
-          >
-            Cancel
-          </button>
+              <option value="Cancelled">
+                Cancelled
+              </option>
+            </select>
+
+            <button
+              type="submit"
+              className="save-btn"
+              disabled={loading}
+            >
+              {loading
+                ? "Placing Order..."
+                : "📦 Place Order"}
+            </button>
+
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={resetForm}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+
+          </form>
+
         </div>
       )}
+
+      {/* ORDERS TABLE */}
       <div className="table-box">
+
         <table>
+
           <thead>
             <tr>
               <th>S.No</th>
@@ -434,146 +385,124 @@ function Orders({ orders = [], setOrders }) {
           </thead>
 
           <tbody>
+
             {loading &&
             safeOrders.length === 0 ? (
+
               <tr>
-                <td
-                  colSpan="9"
-                  style={{
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
+                <td colSpan="9">
                   ⏳ Loading Orders...
                 </td>
               </tr>
+
             ) : safeOrders.length === 0 ? (
+
               <tr>
-                <td
-                  colSpan="9"
-                  style={{
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
+                <td colSpan="9">
                   📦 No Orders Found
                 </td>
               </tr>
+
             ) : (
+
               safeOrders.map(
-                (item, index) => {
-                  const quantity = Number(
-                    item?.quantity || 0
-                  );
+                (order, index) => (
 
-                  const totalAmount = Number(
-                    item?.totalamount || 0
-                  );
+                  <tr
+                    key={
+                      order._id ||
+                      index
+                    }
+                  >
 
-                  return (
-                    <tr
-                      key={
-                        item?._id ||
-                        index
+                    <td>
+                      {index + 1}
+                    </td>
+
+                    <td>
+                      {
+                        order.ordernumber ||
+                        "-"
                       }
-                    >
-                      <td>
-                        {index + 1}
-                      </td>
+                    </td>
 
-                      <td>
-                        {item?.ordernumber ||
-                          "-"}
-                      </td>
+                    <td>
+                      {
+                        order.customername ||
+                        "-"
+                      }
+                    </td>
 
-                      <td>
-                        {item?.customername ||
-                          "-"}
-                      </td>
+                    <td>
+                      {
+                        order.productname ||
+                        "-"
+                      }
+                    </td>
 
-                      <td>
-                        {item?.productname ||
-                          "-"}
-                      </td>
+                    <td>
+                      {
+                        order.quantity ||
+                        0
+                      }
+                    </td>
 
-                      <td>
-                        {quantity}
-                      </td>
+                    <td>
+                      ₹
+                      {
+                        order.totalamount ||
+                        0
+                      }
+                    </td>
 
-                      <td>
-                        ₹{totalAmount}
-                      </td>
+                    <td>
+                      {
+                        order.status ||
+                        "Pending"
+                      }
+                    </td>
 
-                      <td>
-                        <select
-                          value={
-                            item?.status ||
-                            "Pending"
-                          }
-                          onChange={(e) =>
-                            updateStatus(
-                              item?._id,
-                              e.target.value
-                            )
-                          }
-                          disabled={
-                            loading ||
-                            !item?._id
-                          }
-                        >
-                          <option value="Pending">
-                            Pending
-                          </option>
+                    <td>
+                      {order.orderdate
+                        ? new Date(
+                            order.orderdate
+                          ).toLocaleDateString()
+                        : "-"}
+                    </td>
 
-                          <option value="Processing">
-                            Processing
-                          </option>
+                    <td>
 
-                          <option value="Delivered">
-                            Delivered
-                          </option>
+                      <button
+                        className="delete-btn"
+                        onClick={() =>
+                          deleteOrder(
+                            order._id
+                          )
+                        }
+                        disabled={
+                          loading
+                        }
+                      >
+                        🗑 Delete
+                      </button>
 
-                          <option value="Cancelled">
-                            Cancelled
-                          </option>
-                        </select>
-                      </td>
+                    </td>
 
-                      <td>
-                        {item?.orderdate
-                          ? new Date(
-                              item.orderdate
-                            ).toLocaleDateString()
-                          : "-"}
-                      </td>
+                  </tr>
 
-                      <td>
-                        <button
-                          className="delete-btn"
-                          onClick={() =>
-                            deleteOrder(
-                              item?._id
-                            )
-                          }
-                          disabled={
-                            loading ||
-                            !item?._id
-                          }
-                        >
-                          🗑 Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                }
+                )
               )
+
             )}
+
           </tbody>
+
         </table>
+
       </div>
+
     </div>
   );
 }
 
 export default Orders;
-

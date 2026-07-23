@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
   Routes,
@@ -10,9 +9,6 @@ import Layout from "./components/Layout/Layout";
 import HomePage from "./components/Pages/HomePage";
 import NotFound from "./components/Pages/NotFound/NotFound";
 
-import Login from "./components/Login/Login";
-import Register from "./components/Registration/Register";
-
 import Dashboard from "./components/Dashboard/Dashboard";
 
 import Products from "./components/Products/Product";
@@ -22,15 +18,22 @@ import EditProduct from "./components/Products/EditProduct";
 import Category from "./components/Categories/Category";
 import CategoryDetails from "./components/Categories/CategoryDetails";
 import EditCategory from "./components/Categories/EditCategory";
+
 import SupplierDetails from "./components/Pages/SupplierDetails";
 import EditSupplier from "./components/Pages/EditSuppliers";
 
 import StockIn from "./components/Pages/StockIn";
 import StockOut from "./components/Pages/StockOut";
 import Suppliers from "./components/Pages/Suppliers";
+
 import Orders from "./components/Pages/Orders/Orders";
 import Reports from "./components/Pages/Reports";
+
 import AdminProfile from "./components/pages/AdminProfile/AdminProfile";
+
+// Authentication
+import AuthRegister from "./components/Authentication/AuthRegister";
+import AuthLogin from "./components/Authentication/AuthLogin";
 
 import api from "./api/api";
 
@@ -112,7 +115,7 @@ function App() {
     }
   };
 
-  // Fetch Data when App Loads
+  // Fetch data when App loads
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -121,6 +124,8 @@ function App() {
 
   return (
     <Routes>
+
+      {/* ================= HOME ================= */}
 
       <Route
         path="/"
@@ -132,20 +137,26 @@ function App() {
         element={<HomePage />}
       />
 
-      {/* Login */}
+      {/* ================= AUTHENTICATION ================= */}
 
+      {/* Login */}
       <Route
         path="/login"
         element={
-          <Login
+          <AuthLogin
             setIsLoggedIn={setIsLoggedIn}
           />
         }
       />
+
+      {/* Register */}
       <Route
         path="/register"
-        element={<Register />}
+        element={<AuthRegister />}
       />
+
+      {/* ================= PROTECTED ROUTES ================= */}
+
       <Route
         element={
           isLoggedIn ? (
@@ -160,6 +171,8 @@ function App() {
           )
         }
       >
+
+        {/* Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -171,6 +184,8 @@ function App() {
             />
           }
         />
+
+        {/* Products */}
         <Route
           path="/products"
           element={
@@ -184,49 +199,44 @@ function App() {
 
         <Route
           path="/products/:id"
-          element={
-            <ProductDetails />
-          }
+          element={<ProductDetails />}
         />
+
         <Route
           path="/products/edit/:id"
+          element={<EditProduct />}
+        />
+
+        {/* Admin Profile */}
+        <Route
+          path="/admin-profile"
+          element={<AdminProfile />}
+        />
+
+        {/* Categories */}
+        <Route
+          path="/categories"
           element={
-            <EditProduct />
+            <Category
+              categories={categories}
+              setCategories={setCategories}
+              products={products}
+              setProducts={setProducts}
+            />
           }
         />
-        
-
-<Route
-  path="/admin-profile"
-  element={<AdminProfile />}
-/>
-
-                <Route
-            path="/categories"
-            element={
-              <Category
-                categories={categories}
-                setCategories={setCategories}
-                products={products}
-                setProducts={setProducts}
-              />
-            }
-          />
 
         <Route
           path="/categories/:id"
-          element={
-            <CategoryDetails />
-          }
+          element={<CategoryDetails />}
         />
 
         <Route
           path="/categories/edit/:id"
-          element={
-            <EditCategory />
-          }
+          element={<EditCategory />}
         />
 
+        {/* Stock In */}
         <Route
           path="/stockin"
           element={
@@ -237,6 +247,7 @@ function App() {
           }
         />
 
+        {/* Stock Out */}
         <Route
           path="/stockout"
           element={
@@ -245,7 +256,10 @@ function App() {
               setProducts={setProducts}
             />
           }
-                />   <Route
+        />
+
+        {/* Suppliers */}
+        <Route
           path="/suppliers"
           element={<Suppliers />}
         />
@@ -259,16 +273,21 @@ function App() {
           path="/suppliers/edit/:id"
           element={<EditSupplier />}
         />
-              <Route
+
+        {/* Orders */}
+        <Route
           path="/orders"
           element={
             <Orders
               orders={orders}
               setOrders={setOrders}
+              products={products}
+              setProducts={setProducts}
             />
           }
         />
 
+        {/* Reports */}
         <Route
           path="/reports"
           element={
@@ -281,8 +300,6 @@ function App() {
 
       </Route>
 
-      {/* 404 Page */}
-
       <Route
         path="*"
         element={<NotFound />}
@@ -293,4 +310,3 @@ function App() {
 }
 
 export default App;
-
